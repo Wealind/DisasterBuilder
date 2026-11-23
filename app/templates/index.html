@@ -1,0 +1,767 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Disaster Builder | 防災用品の自動構成</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, "Meiryo", sans-serif;
+            background: #f5f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #fff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 20px 30px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .panel {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 26px;
+            margin: 0 0 12px;
+        }
+
+        h2 {
+            font-size: 21px;
+            margin: 0 0 20px;
+        }
+
+        .description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .fields {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin: 28px 0;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+            background: #fff;
+        }
+
+        input:focus,
+        select:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #2563eb;
+        }
+
+        button {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 7px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .error {
+            color: #dc2626;
+            margin-top: 12px;
+        }
+
+        #results {
+            display: none;
+        }
+
+        .summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 16px 22px;
+            min-width: 140px;
+        }
+
+        .summary-label {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .summary-value {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 750px;
+        }
+
+        th,
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e5e7eb;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #f8fafc;
+            font-size: 13px;
+            color: #475569;
+            white-space: nowrap;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .quantity-cell {
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+        .owned-input {
+            width: 90px;
+            padding: 8px;
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .category-row td {
+            background: #eff6ff;
+            color: #1d4ed8;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 12px 14px;
+        }
+
+        .shortage {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .no-shortage {
+            color: #16a34a;
+            font-weight: bold;
+        }
+
+        .product-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .product-detail {
+            font-size: 13px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .product-link {
+            display: inline-block;
+            margin-top: 8px;
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .product-link:hover {
+            text-decoration: underline;
+        }
+
+        .total-price {
+            margin-top: 24px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .note {
+            margin-top: 20px;
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 16px 20px;
+                font-size: 20px;
+            }
+
+            main {
+                margin: 20px auto;
+                padding: 0 12px;
+            }
+
+            .panel {
+                padding: 18px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            .fields {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .summary-card {
+                flex: 1;
+                min-width: 100px;
+                padding: 12px;
+            }
+
+            .summary-value {
+                font-size: 20px;
+            }
+
+            .total-price {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    Disaster Builder
+</header>
+
+<main>
+
+    <!-- ====================================
+         入力フォーム
+    ===================================== -->
+
+    <section class="panel">
+
+        <h1>防災用品の自動構成</h1>
+
+        <p class="description">
+            家族構成と備蓄日数を入力すると、
+            必要な防災用品と数量を自動計算します。
+            所有済みの用品を入力すれば、不足分も確認できます。
+        </p>
+
+        <form id="calculate-form">
+
+            <div class="fields">
+
+                <div>
+                    <label for="adults">大人の人数</label>
+                    <input
+                        type="number"
+                        id="adults"
+                        value="2"
+                        min="0"
+                        max="30"
+                        step="1"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="children">子供の人数</label>
+                    <input
+                        type="number"
+                        id="children"
+                        value="1"
+                        min="0"
+                        max="30"
+                        step="1"
+                        required
+                    >
+                </div>
+
+                <div>
+                    <label for="days">備蓄日数</label>
+                    <select id="days">
+                        <option value="3">3日分</option>
+                        <option value="7" selected>7日分</option>
+                        <option value="14">14日分</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button type="submit" id="calculate-button">
+                必要な防災用品を計算
+            </button>
+
+            <p class="error" id="error"></p>
+
+        </form>
+
+    </section>
+
+
+    <!-- ====================================
+         計算結果
+    ===================================== -->
+
+    <section class="panel" id="results">
+
+        <h2>防災用品の構成結果</h2>
+
+        <div class="summary">
+
+            <div class="summary-card">
+                <div class="summary-label">家族人数</div>
+                <div class="summary-value" id="summary-people">-</div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-label">備蓄日数</div>
+                <div class="summary-value" id="summary-days">-</div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-label">不足している用品</div>
+                <div class="summary-value" id="summary-shortages">-</div>
+            </div>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>防災用品</th>
+                        <th>必要数量</th>
+                        <th>所有済み</th>
+                        <th>不足数量</th>
+                        <th>購入候補</th>
+                    </tr>
+                </thead>
+
+                <tbody id="result-body"></tbody>
+
+            </table>
+
+        </div>
+
+
+        <div id="total-price" class="total-price"></div>
+
+        <p class="note">
+            ※ 現在の商品データは仮の構成です。
+            価格・購入URLは未登録のため、購入リンクは表示されません。
+            また、必要数量は基本的な計算モデルによる目安です。
+        </p>
+
+    </section>
+
+</main>
+
+
+<script>
+// ========================================
+// 要素取得
+// ========================================
+
+const form = document.getElementById("calculate-form");
+const button = document.getElementById("calculate-button");
+const errorElement = document.getElementById("error");
+const resultsElement = document.getElementById("results");
+const resultBody = document.getElementById("result-body");
+
+
+// ========================================
+// 所有済み数量
+// ========================================
+
+// キー: 用品ID
+// 値: 所有済み数量
+const ownedQuantities = {};
+
+
+// ========================================
+// テーブルセル生成
+// ========================================
+
+function createCell(text, className = "") {
+    const cell = document.createElement("td");
+    cell.textContent = text;
+
+    if (className) {
+        cell.className = className;
+    }
+
+    return cell;
+}
+
+
+// ========================================
+// 数量表示
+// ========================================
+
+function formatQuantity(value) {
+    return Number(value).toLocaleString("ja-JP", {
+        maximumFractionDigits: 2
+    });
+}
+
+
+// ========================================
+// 計算処理
+// ========================================
+
+async function calculateSupplies() {
+
+    errorElement.textContent = "";
+    button.disabled = true;
+
+    const data = {
+        adults: Number(document.getElementById("adults").value),
+        children: Number(document.getElementById("children").value),
+        days: Number(document.getElementById("days").value),
+        owned: ownedQuantities
+    };
+
+    try {
+
+        const response = await fetch("/api/calculate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            let message = "計算に失敗しました。";
+
+            if (response.status === 422) {
+                message = "入力内容を確認してください。";
+            }
+
+            throw new Error(message);
+        }
+
+        const result = await response.json();
+
+        renderResults(result);
+
+        resultsElement.style.display = "block";
+
+    } catch (error) {
+
+        errorElement.textContent = error.message;
+
+    } finally {
+
+        button.disabled = false;
+
+    }
+}
+
+
+// ========================================
+// 結果表示
+// ========================================
+
+function renderResults(result) {
+
+    // ------------------------------------
+    // サマリー
+    // ------------------------------------
+
+    document.getElementById("summary-people").textContent =
+        `${result.people} 人`;
+
+    document.getElementById("summary-days").textContent =
+        `${result.days} 日`;
+
+    const shortageCount = result.items.filter(
+        item => item.shortage > 0
+    ).length;
+
+    document.getElementById("summary-shortages").textContent =
+        `${shortageCount} 種類`;
+
+
+    // ------------------------------------
+    // テーブル初期化
+    // ------------------------------------
+
+    resultBody.replaceChildren();
+
+    let currentCategory = "";
+
+
+    // ------------------------------------
+    // 各用品の表示
+    // ------------------------------------
+
+    for (const item of result.items) {
+
+        // カテゴリ行
+        if (item.category !== currentCategory) {
+
+            currentCategory = item.category;
+
+            const categoryRow = document.createElement("tr");
+            categoryRow.className = "category-row";
+
+            const categoryCell = document.createElement("td");
+            categoryCell.colSpan = 5;
+            categoryCell.textContent = currentCategory;
+
+            categoryRow.appendChild(categoryCell);
+            resultBody.appendChild(categoryRow);
+        }
+
+
+        const row = document.createElement("tr");
+
+
+        // --------------------------------
+        // 用品名
+        // --------------------------------
+
+        row.appendChild(
+            createCell(item.name)
+        );
+
+
+        // --------------------------------
+        // 必要数量
+        // --------------------------------
+
+        row.appendChild(
+            createCell(
+                `${formatQuantity(item.quantity)} ${item.unit}`,
+                "quantity-cell"
+            )
+        );
+
+
+        // --------------------------------
+        // 所有済み数量
+        // --------------------------------
+
+        const ownedCell = document.createElement("td");
+
+        const ownedInput = document.createElement("input");
+
+        ownedInput.type = "number";
+        ownedInput.min = "0";
+        ownedInput.step = "any";
+        ownedInput.className = "owned-input";
+
+        ownedInput.value = item.owned;
+
+        ownedInput.setAttribute(
+            "aria-label",
+            `${item.name}の所有済み数量（${item.unit}）`
+        );
+
+        ownedInput.addEventListener("change", () => {
+
+            const value = Number(ownedInput.value);
+
+            if (!Number.isFinite(value) || value < 0) {
+                ownedInput.value = item.owned;
+                return;
+            }
+
+            ownedQuantities[String(item.id)] = value;
+
+            calculateSupplies();
+        });
+
+        ownedCell.appendChild(ownedInput);
+        row.appendChild(ownedCell);
+
+
+        // --------------------------------
+        // 不足数量
+        // --------------------------------
+
+        const shortageCell = createCell(
+            `${formatQuantity(item.shortage)} ${item.unit}`
+        );
+
+        shortageCell.className =
+            item.shortage > 0
+                ? "shortage"
+                : "no-shortage";
+
+        row.appendChild(shortageCell);
+
+
+        // --------------------------------
+        // 購入候補
+        // --------------------------------
+
+        const productCell = document.createElement("td");
+
+        if (item.shortage === 0) {
+
+            productCell.textContent = "購入不要";
+
+        } else if (item.product) {
+
+            const productName = document.createElement("div");
+            productName.className = "product-name";
+            productName.textContent = item.product.name;
+
+            productCell.appendChild(productName);
+
+
+            const packageDetail = document.createElement("div");
+            packageDetail.className = "product-detail";
+
+            packageDetail.textContent =
+                `${formatQuantity(item.product.packages)} パッケージ必要`;
+
+            productCell.appendChild(packageDetail);
+
+
+            // 商品価格
+            if (item.product.price !== null) {
+
+                const priceDetail = document.createElement("div");
+                priceDetail.className = "product-detail";
+
+                priceDetail.textContent =
+                    `単価：${Number(item.product.price).toLocaleString()}円`;
+
+                productCell.appendChild(priceDetail);
+            }
+
+
+            // 小計
+            if (item.product.subtotal !== null) {
+
+                const subtotalDetail = document.createElement("div");
+                subtotalDetail.className = "product-detail";
+
+                subtotalDetail.textContent =
+                    `小計：${Number(item.product.subtotal).toLocaleString()}円`;
+
+                productCell.appendChild(subtotalDetail);
+            }
+
+
+            // 購入リンク
+            if (item.product.url) {
+
+                const link = document.createElement("a");
+
+                link.href = item.product.url;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                link.className = "product-link";
+                link.textContent = "購入先を見る";
+
+                productCell.appendChild(link);
+            }
+
+        } else {
+
+            productCell.textContent = "商品未登録";
+
+        }
+
+        row.appendChild(productCell);
+
+        resultBody.appendChild(row);
+    }
+
+
+    // ------------------------------------
+    // 概算金額
+    // ------------------------------------
+
+    const totalPriceElement =
+        document.getElementById("total-price");
+
+    if (result.total_price === null) {
+
+        totalPriceElement.textContent =
+            "概算購入金額：価格未登録の商品があります";
+
+    } else {
+
+        totalPriceElement.textContent =
+            `概算購入金額：${Number(result.total_price).toLocaleString()}円`;
+
+    }
+}
+
+
+// ========================================
+// フォーム送信
+// ========================================
+
+form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    calculateSupplies();
+});
+</script>
+
+</body>
+</html>
