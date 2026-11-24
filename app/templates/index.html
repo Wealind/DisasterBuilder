@@ -27,8 +27,8 @@
         }
 
         main {
-            max-width: 1100px;
-            margin: 40px auto;
+            max-width: 1400px;
+            margin: 32px auto;
             padding: 0 20px;
         }
 
@@ -50,21 +50,29 @@
             margin: 0 0 20px;
         }
 
-        .description {
-            color: #666;
-            font-size: 14px;
-            line-height: 1.7;
+        .description,
+        .note {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .section-label {
+            font-weight: bold;
+            margin-top: 24px;
+            font-size: 15px;
         }
 
         .fields {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 18px;
-            margin: 28px 0;
+            margin: 18px 0 24px;
         }
 
         label {
             display: block;
+            font-size: 13px;
             font-weight: bold;
             margin-bottom: 8px;
         }
@@ -72,11 +80,11 @@
         input,
         select {
             width: 100%;
-            padding: 12px;
+            padding: 11px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            font-size: 16px;
             background: #fff;
+            font-size: 15px;
         }
 
         input:focus,
@@ -86,12 +94,11 @@
         }
 
         button {
+            border: none;
             background: #2563eb;
             color: #fff;
-            border: none;
-            padding: 14px 28px;
+            padding: 13px 24px;
             border-radius: 7px;
-            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
         }
@@ -101,13 +108,12 @@
         }
 
         button:disabled {
-            opacity: 0.6;
-            cursor: wait;
+            opacity: .6;
         }
 
         .error {
             color: #dc2626;
-            margin-top: 12px;
+            font-size: 13px;
         }
 
         #results {
@@ -130,14 +136,88 @@
         }
 
         .summary-label {
+            font-size: 12px;
             color: #64748b;
-            font-size: 13px;
             margin-bottom: 6px;
         }
 
         .summary-value {
-            font-size: 24px;
+            font-size: 23px;
             font-weight: bold;
+        }
+
+        .carry-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .carry-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .carry-value {
+            font-size: 26px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .progress-track {
+            background: #e5e7eb;
+            height: 10px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: #2563eb;
+            transition: width .2s;
+        }
+
+        .warning {
+            color: #b91c1c;
+            font-size: 13px;
+            margin-top: 10px;
+            line-height: 1.7;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tab {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 10px 18px;
+        }
+
+        .tab:hover {
+            background: #dbeafe;
+        }
+
+        .tab.active {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        .sort-select {
+            width: auto;
         }
 
         .table-wrapper {
@@ -146,47 +226,58 @@
 
         table {
             width: 100%;
+            min-width: 1000px;
             border-collapse: collapse;
-            min-width: 750px;
         }
 
         th,
         td {
-            padding: 14px;
-            border-bottom: 1px solid #e5e7eb;
             text-align: left;
+            padding: 13px 10px;
+            border-bottom: 1px solid #e5e7eb;
             vertical-align: middle;
+            font-size: 13px;
         }
 
         th {
             background: #f8fafc;
-            font-size: 13px;
             color: #475569;
             white-space: nowrap;
-        }
-
-        td {
-            font-size: 14px;
-        }
-
-        .quantity-cell {
-            white-space: nowrap;
-            font-weight: bold;
-        }
-
-        .owned-input {
-            width: 90px;
-            padding: 8px;
-            text-align: right;
-            font-size: 14px;
         }
 
         .category-row td {
             background: #eff6ff;
             color: #1d4ed8;
             font-weight: bold;
-            font-size: 14px;
-            padding: 12px 14px;
+        }
+
+        .item-name {
+            font-weight: bold;
+        }
+
+        .quantity-cell {
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .owned-input {
+            width: 78px;
+            padding: 7px;
+            text-align: right;
+            font-size: 13px;
+        }
+
+        .owned-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 3px 0;
+        }
+
+        .owned-label {
+            font-size: 11px;
+            color: #64748b;
+            min-width: 48px;
         }
 
         .shortage {
@@ -199,68 +290,84 @@
             font-weight: bold;
         }
 
+        .tag {
+            display: inline-block;
+            padding: 4px 7px;
+            border-radius: 5px;
+            font-size: 11px;
+            white-space: nowrap;
+        }
+
+        .storage-home {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        .storage-go {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .storage-both {
+            background: #e0f2fe;
+            color: #075985;
+        }
+
+        .priority-essential {
+            background: #fee2e2;
+            color: #b91c1c;
+            font-weight: bold;
+        }
+
+        .priority-recommended {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .priority-optional {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
         .product-name {
             font-weight: bold;
-            margin-bottom: 5px;
         }
 
         .product-detail {
-            font-size: 13px;
-            color: #666;
-            margin-top: 4px;
+            color: #64748b;
+            font-size: 12px;
+            margin-top: 5px;
         }
 
         .product-link {
             display: inline-block;
-            margin-top: 8px;
             color: #2563eb;
+            margin-top: 6px;
             text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        .product-link:hover {
-            text-decoration: underline;
         }
 
         .total-price {
-            margin-top: 24px;
-            padding: 20px;
             background: #f8fafc;
+            padding: 20px;
             border-radius: 8px;
             font-size: 20px;
             font-weight: bold;
+            margin-top: 24px;
         }
 
-        .note {
-            margin-top: 20px;
-            color: #64748b;
-            font-size: 13px;
-            line-height: 1.8;
-        }
-
-        @media (max-width: 600px) {
-            header {
-                padding: 16px 20px;
-                font-size: 20px;
-            }
-
+        @media (max-width: 700px) {
             main {
-                margin: 20px auto;
                 padding: 0 12px;
+                margin-top: 20px;
             }
 
             .panel {
                 padding: 18px;
             }
 
-            h1 {
-                font-size: 22px;
-            }
-
-            .fields {
+            .fields,
+            .carry-grid {
                 grid-template-columns: 1fr;
-                gap: 14px;
             }
 
             .summary-card {
@@ -268,77 +375,103 @@
                 min-width: 100px;
                 padding: 12px;
             }
-
-            .summary-value {
-                font-size: 20px;
-            }
-
-            .total-price {
-                font-size: 17px;
-            }
         }
     </style>
 </head>
 
 <body>
 
-<header>
-    Disaster Builder
-</header>
+<header>Disaster Builder</header>
 
 <main>
-
-    <!-- ====================================
-         入力フォーム
-    ===================================== -->
 
     <section class="panel">
 
         <h1>防災用品の自動構成</h1>
 
         <p class="description">
-            家族構成と備蓄日数を入力すると、
-            必要な防災用品と数量を自動計算します。
-            所有済みの用品を入力すれば、不足分も確認できます。
+            家族構成と備蓄日数から、自宅備蓄と非常持ち出しに
+            必要な防災用品を計算します。
         </p>
 
         <form id="calculate-form">
+
+            <div class="section-label">家族構成</div>
 
             <div class="fields">
 
                 <div>
                     <label for="adults">大人の人数</label>
-                    <input
-                        type="number"
-                        id="adults"
-                        value="2"
-                        min="0"
-                        max="30"
-                        step="1"
-                        required
-                    >
+                    <input type="number" id="adults"
+                           value="2" min="0" max="30" required>
                 </div>
 
                 <div>
                     <label for="children">子供の人数</label>
-                    <input
-                        type="number"
-                        id="children"
-                        value="1"
-                        min="0"
-                        max="30"
-                        step="1"
-                        required
-                    >
+                    <input type="number" id="children"
+                           value="1" min="0" max="30" required>
                 </div>
 
                 <div>
-                    <label for="days">備蓄日数</label>
+                    <label for="pets">ペットの数</label>
+                    <input type="number" id="pets"
+                           value="0" min="0" max="30" required>
+                </div>
+
+                <div>
+                    <label for="infants">乳幼児（子供の内数）</label>
+                    <input type="number" id="infants"
+                           value="0" min="0" max="30" required>
+                </div>
+
+                <div>
+                    <label for="seniors">高齢者（大人の内数）</label>
+                    <input type="number" id="seniors"
+                           value="0" min="0" max="30" required>
+                </div>
+
+            </div>
+
+            <div class="section-label">自宅備蓄・持ち出し条件</div>
+
+            <div class="fields">
+
+                <div>
+                    <label for="days">自宅備蓄日数</label>
                     <select id="days">
                         <option value="3">3日分</option>
                         <option value="7" selected>7日分</option>
                         <option value="14">14日分</option>
                     </select>
+                </div>
+
+                <div>
+                    <label for="go-days">非常持ち出し日数</label>
+                    <select id="go-days">
+                        <option value="1" selected>1日分</option>
+                        <option value="2">2日分</option>
+                        <option value="3">3日分</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="backpack-capacity">
+                        リュックの合計容量（L）
+                    </label>
+                    <input type="number"
+                           id="backpack-capacity"
+                           value="30" min="1" max="1000"
+                           step="1" required>
+                </div>
+
+                <div>
+                    <label for="max-carry-weight">
+                        持ち出し重量の上限（kg・合計）
+                    </label>
+                    <input type="number"
+                           id="max-carry-weight"
+                           value="10" min="0.5" max="500"
+                           step="0.5" required>
                 </div>
 
             </div>
@@ -347,16 +480,12 @@
                 必要な防災用品を計算
             </button>
 
-            <p class="error" id="error"></p>
+            <p class="error" id="error" role="alert"></p>
 
         </form>
 
     </section>
 
-
-    <!-- ====================================
-         計算結果
-    ===================================== -->
 
     <section class="panel" id="results">
 
@@ -370,14 +499,90 @@
             </div>
 
             <div class="summary-card">
-                <div class="summary-label">備蓄日数</div>
+                <div class="summary-label">自宅備蓄</div>
                 <div class="summary-value" id="summary-days">-</div>
             </div>
 
             <div class="summary-card">
-                <div class="summary-label">不足している用品</div>
+                <div class="summary-label">非常持ち出し</div>
+                <div class="summary-value" id="summary-go-days">-</div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-label">対象用品</div>
+                <div class="summary-value" id="summary-items">-</div>
+            </div>
+
+            <div class="summary-card">
+                <div class="summary-label">不足用品</div>
                 <div class="summary-value" id="summary-shortages">-</div>
             </div>
+
+        </div>
+
+
+        <div class="carry-grid">
+
+            <div class="carry-card">
+
+                <div class="summary-label">
+                    非常持ち出し用品の推定重量
+                </div>
+
+                <div class="carry-value" id="carry-weight">-</div>
+
+                <div class="progress-track">
+                    <div class="progress-bar" id="weight-bar"></div>
+                </div>
+
+                <div class="warning" id="weight-warning"></div>
+
+            </div>
+
+            <div class="carry-card">
+
+                <div class="summary-label">
+                    リュックの推定容量使用率
+                </div>
+
+                <div class="carry-value" id="carry-volume">-</div>
+
+                <div class="progress-track">
+                    <div class="progress-bar" id="volume-bar"></div>
+                </div>
+
+                <div class="warning" id="volume-warning"></div>
+
+            </div>
+
+        </div>
+
+
+        <div class="toolbar">
+
+            <div class="tabs">
+
+                <button type="button" class="tab active"
+                        data-storage="all">
+                    すべて
+                </button>
+
+                <button type="button" class="tab"
+                        data-storage="home">
+                    自宅備蓄
+                </button>
+
+                <button type="button" class="tab"
+                        data-storage="go">
+                    非常持ち出し
+                </button>
+
+            </div>
+
+            <select id="sort-by" class="sort-select">
+                <option value="category">カテゴリ順</option>
+                <option value="priority">不足・優先度順</option>
+            </select>
 
         </div>
 
@@ -389,9 +594,12 @@
                 <thead>
                     <tr>
                         <th>防災用品</th>
+                        <th>区分</th>
+                        <th>優先度</th>
                         <th>必要数量</th>
                         <th>所有済み</th>
                         <th>不足数量</th>
+                        <th>持出重量</th>
                         <th>購入候補</th>
                     </tr>
                 </thead>
@@ -402,13 +610,15 @@
 
         </div>
 
-
-        <div id="total-price" class="total-price"></div>
+        <div class="total-price" id="total-price"></div>
 
         <p class="note">
-            ※ 現在の商品データは仮の構成です。
-            価格・購入URLは未登録のため、購入リンクは表示されません。
-            また、必要数量は基本的な計算モデルによる目安です。
+            ※ 自宅備蓄と持ち出し用品は別々に確保する計算です。
+            同じ用品を両方の所有済み数量に入力しないでください。
+            重量・容量は仮の推定値であり、未登録用品を含みません。
+            実際の持ち運びや収納可否は、製品仕様と各人の体力に応じて
+            確認してください。飲料水の持出数量は携行量の目安であり、
+            必要な水分量を保証するものではありません。
         </p>
 
     </section>
@@ -417,71 +627,203 @@
 
 
 <script>
-// ========================================
-// 要素取得
-// ========================================
-
 const form = document.getElementById("calculate-form");
 const button = document.getElementById("calculate-button");
 const errorElement = document.getElementById("error");
 const resultsElement = document.getElementById("results");
 const resultBody = document.getElementById("result-body");
 
+const storageLabels = {
+    home: "自宅備蓄",
+    go: "持ち出し",
+    both: "共通"
+};
+
+const priorityLabels = {
+    essential: "必須",
+    recommended: "推奨",
+    optional: "任意"
+};
+
+let storageType = "all";
+let requestSequence = 0;
+
+const HOME_KEY = "disaster_builder_owned_v1";
+const GO_KEY = "disaster_builder_owned_go_v1";
+
 
 // ========================================
-// 所有済み数量
+// LocalStorage
 // ========================================
 
-// キー: 用品ID
-// 値: 所有済み数量
-const ownedQuantities = {};
+function loadOwned(key) {
+    try {
+        const saved = JSON.parse(
+            localStorage.getItem(key) || "{}"
+        );
 
+        const valid = {};
 
-// ========================================
-// テーブルセル生成
-// ========================================
+        if (saved && typeof saved === "object") {
+            for (const [id, value] of Object.entries(saved)) {
+                const quantity = Number(value);
 
-function createCell(text, className = "") {
-    const cell = document.createElement("td");
-    cell.textContent = text;
+                if (Number.isFinite(quantity) && quantity >= 0) {
+                    valid[id] = quantity;
+                }
+            }
+        }
 
-    if (className) {
-        cell.className = className;
+        return valid;
+
+    } catch {
+        return {};
     }
+}
 
-    return cell;
+const ownedHome = loadOwned(HOME_KEY);
+const ownedGo = loadOwned(GO_KEY);
+
+function saveOwned() {
+    try {
+        localStorage.setItem(
+            HOME_KEY,
+            JSON.stringify(ownedHome)
+        );
+
+        localStorage.setItem(
+            GO_KEY,
+            JSON.stringify(ownedGo)
+        );
+
+    } catch (error) {
+        console.warn(error);
+    }
 }
 
 
 // ========================================
-// 数量表示
+// 共通関数
 // ========================================
 
-function formatQuantity(value) {
+function format(value) {
     return Number(value).toLocaleString("ja-JP", {
         maximumFractionDigits: 2
     });
 }
 
+function setText(id, value) {
+    document.getElementById(id).textContent = value;
+}
+
+function createCell(text, className = "") {
+    const cell = document.createElement("td");
+
+    cell.textContent = text;
+    cell.className = className;
+
+    return cell;
+}
+
+function createTagCell(text, className) {
+    const cell = document.createElement("td");
+    const tag = document.createElement("span");
+
+    tag.className = `tag ${className}`;
+    tag.textContent = text;
+
+    cell.appendChild(tag);
+
+    return cell;
+}
+
+function createDetail(text) {
+    const div = document.createElement("div");
+    div.className = "product-detail";
+    div.textContent = text;
+
+    return div;
+}
+
 
 // ========================================
-// 計算処理
+// 入力データ
+// ========================================
+
+function getInputData() {
+    return {
+        adults: Number(document.getElementById("adults").value),
+        children: Number(document.getElementById("children").value),
+
+        infants: Number(document.getElementById("infants").value),
+        seniors: Number(document.getElementById("seniors").value),
+        pets: Number(document.getElementById("pets").value),
+
+        days: Number(document.getElementById("days").value),
+        go_days: Number(document.getElementById("go-days").value),
+
+        backpack_capacity: Number(
+            document.getElementById("backpack-capacity").value
+        ),
+
+        max_carry_weight: Number(
+            document.getElementById("max-carry-weight").value
+        ),
+
+        storage_type: storageType,
+
+        sort_by: document.getElementById("sort-by").value,
+
+        owned: { ...ownedHome },
+        owned_go: { ...ownedGo }
+    };
+}
+
+
+// ========================================
+// API
 // ========================================
 
 async function calculateSupplies() {
 
+    const sequence = ++requestSequence;
+
     errorElement.textContent = "";
+
+    if (!form.reportValidity()) {
+        button.disabled = false;
+        resultsElement.style.display = "none";
+        return;
+    }
+
+    const data = getInputData();
+
+    if (data.adults + data.children < 1) {
+        errorElement.textContent = "人数は1人以上にしてください。";
+        button.disabled = false;
+        resultsElement.style.display = "none";
+        return;
+    }
+
+    if (data.infants > data.children) {
+        errorElement.textContent =
+            "乳幼児の人数は子供の人数以下にしてください。";
+        button.disabled = false;
+        resultsElement.style.display = "none";
+        return;
+    }
+
+    if (data.seniors > data.adults) {
+        errorElement.textContent =
+            "高齢者の人数は大人の人数以下にしてください。";
+        button.disabled = false;
+        resultsElement.style.display = "none";
+        return;
+    }
+
     button.disabled = true;
 
-    const data = {
-        adults: Number(document.getElementById("adults").value),
-        children: Number(document.getElementById("children").value),
-        days: Number(document.getElementById("days").value),
-        owned: ownedQuantities
-    };
-
     try {
-
         const response = await fetch("/api/calculate", {
             method: "POST",
             headers: {
@@ -491,16 +833,18 @@ async function calculateSupplies() {
         });
 
         if (!response.ok) {
-            let message = "計算に失敗しました。";
-
-            if (response.status === 422) {
-                message = "入力内容を確認してください。";
-            }
-
-            throw new Error(message);
+            throw new Error(
+                response.status === 422
+                    ? "入力内容を確認してください。"
+                    : "計算に失敗しました。"
+            );
         }
 
         const result = await response.json();
+
+        if (sequence !== requestSequence) {
+            return;
+        }
 
         renderResults(result);
 
@@ -508,13 +852,143 @@ async function calculateSupplies() {
 
     } catch (error) {
 
-        errorElement.textContent = error.message;
+        if (sequence === requestSequence) {
+            errorElement.textContent = error.message;
+            resultsElement.style.display = "none";
+        }
 
     } finally {
 
-        button.disabled = false;
-
+        if (sequence === requestSequence) {
+            button.disabled = false;
+        }
     }
+}
+
+
+// ========================================
+// 重量・容量表示
+// ========================================
+
+function updateBar(id, percent) {
+    const bar = document.getElementById(id);
+
+    bar.style.width = `${Math.min(100, percent)}%`;
+
+    bar.style.background =
+        percent > 100 ? "#dc2626" : "#2563eb";
+}
+
+function renderCarry(result) {
+
+    setText(
+        "carry-weight",
+        `${format(result.total_go_weight)} / ` +
+        `${format(result.max_carry_weight)} kg`
+    );
+
+    setText(
+        "carry-volume",
+        `${format(result.total_go_volume)} / ` +
+        `${format(result.backpack_capacity)} L`
+    );
+
+    updateBar("weight-bar", result.weight_usage);
+    updateBar("volume-bar", result.capacity_usage);
+
+    const weightMessages = [];
+    const volumeMessages = [];
+
+    if (result.weight_exceeded) {
+        weightMessages.push(
+            "設定した重量上限を超えています。"
+        );
+    }
+
+    if (result.capacity_exceeded) {
+        volumeMessages.push(
+            "設定した容量を超えています。"
+        );
+    }
+
+    if (result.unknown_weight_count > 0) {
+        weightMessages.push(
+            `重量未登録：${result.unknown_weight_count}種類。` +
+            "表示値は登録済み分のみです。"
+        );
+    }
+
+    if (result.unknown_volume_count > 0) {
+        volumeMessages.push(
+            `容量未登録：${result.unknown_volume_count}種類。` +
+            "表示値は登録済み分のみです。"
+        );
+    }
+
+    setText("weight-warning", weightMessages.join(" "));
+    setText("volume-warning", volumeMessages.join(" "));
+}
+
+
+// ========================================
+// 所有済み数量入力
+// ========================================
+
+function createOwnedInput(item, type) {
+
+    const group = document.createElement("div");
+    group.className = "owned-group";
+
+    const label = document.createElement("span");
+    label.className = "owned-label";
+
+    label.textContent =
+        type === "home" ? "自宅" : "持出";
+
+    const input = document.createElement("input");
+
+    input.type = "number";
+    input.min = "0";
+    input.step = "any";
+    input.className = "owned-input";
+
+    input.value =
+        type === "home"
+            ? item.home_owned
+            : item.go_owned;
+
+    input.setAttribute(
+        "aria-label",
+        `${item.name} ${label.textContent} 所有数量`
+    );
+
+    input.addEventListener("change", () => {
+
+        const value = Number(input.value);
+
+        if (!Number.isFinite(value) || value < 0) {
+
+            input.value =
+                type === "home"
+                    ? item.home_owned
+                    : item.go_owned;
+
+            return;
+        }
+
+        if (type === "home") {
+            ownedHome[String(item.id)] = value;
+        } else {
+            ownedGo[String(item.id)] = value;
+        }
+
+        saveOwned();
+        calculateSupplies();
+    });
+
+    group.append(label, input);
+
+    return group;
 }
 
 
@@ -524,137 +998,159 @@ async function calculateSupplies() {
 
 function renderResults(result) {
 
-    // ------------------------------------
-    // サマリー
-    // ------------------------------------
-
-    document.getElementById("summary-people").textContent =
-        `${result.people} 人`;
-
-    document.getElementById("summary-days").textContent =
-        `${result.days} 日`;
+    setText("summary-people", `${result.people} 人`);
+    setText("summary-days", `${result.days} 日`);
+    setText("summary-go-days", `${result.go_days} 日`);
+    setText("summary-items", `${result.items.length} 種類`);
 
     const shortageCount = result.items.filter(
         item => item.shortage > 0
     ).length;
 
-    document.getElementById("summary-shortages").textContent =
-        `${shortageCount} 種類`;
+    setText("summary-shortages", `${shortageCount} 種類`);
 
-
-    // ------------------------------------
-    // テーブル初期化
-    // ------------------------------------
+    renderCarry(result);
 
     resultBody.replaceChildren();
 
     let currentCategory = "";
 
-
-    // ------------------------------------
-    // 各用品の表示
-    // ------------------------------------
+    const sortBy = document.getElementById("sort-by").value;
 
     for (const item of result.items) {
 
-        // カテゴリ行
-        if (item.category !== currentCategory) {
-
+        if (
+            sortBy === "category" &&
+            item.category !== currentCategory
+        ) {
             currentCategory = item.category;
 
             const categoryRow = document.createElement("tr");
             categoryRow.className = "category-row";
 
             const categoryCell = document.createElement("td");
-            categoryCell.colSpan = 5;
+
+            categoryCell.colSpan = 8;
             categoryCell.textContent = currentCategory;
 
             categoryRow.appendChild(categoryCell);
             resultBody.appendChild(categoryRow);
         }
 
-
         const row = document.createElement("tr");
 
-
-        // --------------------------------
         // 用品名
-        // --------------------------------
 
-        row.appendChild(
-            createCell(item.name)
+        const nameCell = createCell(
+            item.name,
+            "item-name"
         );
 
+        if (sortBy === "priority") {
+            nameCell.appendChild(
+                createDetail(item.category)
+            );
+        }
 
-        // --------------------------------
-        // 必要数量
-        // --------------------------------
+        row.appendChild(nameCell);
+
+        // 区分
 
         row.appendChild(
-            createCell(
-                `${formatQuantity(item.quantity)} ${item.unit}`,
-                "quantity-cell"
+            createTagCell(
+                storageLabels[item.storage_type] || "-",
+                `storage-${item.storage_type}`
             )
         );
 
+        // 優先度
 
-        // --------------------------------
-        // 所有済み数量
-        // --------------------------------
+        row.appendChild(
+            createTagCell(
+                priorityLabels[item.priority] || "-",
+                `priority-${item.priority}`
+            )
+        );
+
+        // 必要数量
+
+        const quantityCell = createCell(
+            `${format(item.quantity)} ${item.unit}`,
+            "quantity-cell"
+        );
+
+        if (storageType === "all") {
+
+            if (item.home_required > 0) {
+                quantityCell.appendChild(
+                    createDetail(
+                        `自宅：${format(item.home_required)} ${item.unit}`
+                    )
+                );
+            }
+
+            if (item.go_required > 0) {
+                quantityCell.appendChild(
+                    createDetail(
+                        `持出：${format(item.go_required)} ${item.unit}`
+                    )
+                );
+            }
+        }
+
+        row.appendChild(quantityCell);
+
+        // 所有済み
 
         const ownedCell = document.createElement("td");
 
-        const ownedInput = document.createElement("input");
+        if (
+            storageType !== "go" &&
+            item.home_required > 0
+        ) {
+            ownedCell.appendChild(
+                createOwnedInput(item, "home")
+            );
+        }
 
-        ownedInput.type = "number";
-        ownedInput.min = "0";
-        ownedInput.step = "any";
-        ownedInput.className = "owned-input";
+        if (
+            storageType !== "home" &&
+            item.go_required > 0
+        ) {
+            ownedCell.appendChild(
+                createOwnedInput(item, "go")
+            );
+        }
 
-        ownedInput.value = item.owned;
-
-        ownedInput.setAttribute(
-            "aria-label",
-            `${item.name}の所有済み数量（${item.unit}）`
-        );
-
-        ownedInput.addEventListener("change", () => {
-
-            const value = Number(ownedInput.value);
-
-            if (!Number.isFinite(value) || value < 0) {
-                ownedInput.value = item.owned;
-                return;
-            }
-
-            ownedQuantities[String(item.id)] = value;
-
-            calculateSupplies();
-        });
-
-        ownedCell.appendChild(ownedInput);
         row.appendChild(ownedCell);
 
-
-        // --------------------------------
         // 不足数量
-        // --------------------------------
 
-        const shortageCell = createCell(
-            `${formatQuantity(item.shortage)} ${item.unit}`
+        row.appendChild(
+            createCell(
+                `${format(item.shortage)} ${item.unit}`,
+                item.shortage > 0
+                    ? "shortage"
+                    : "no-shortage"
+            )
         );
 
-        shortageCell.className =
-            item.shortage > 0
-                ? "shortage"
-                : "no-shortage";
+        // 持ち出し重量
 
-        row.appendChild(shortageCell);
+        let weightText = "-";
 
+        if (storageType !== "home" && item.go_required > 0) {
+            weightText =
+                item.go_weight === null
+                    ? "未登録"
+                    : `${format(item.go_weight)} kg`;
+        }
 
-        // --------------------------------
+        row.appendChild(
+            createCell(weightText)
+        );
+
         // 購入候補
-        // --------------------------------
 
         const productCell = document.createElement("td");
 
@@ -665,65 +1161,60 @@ function renderResults(result) {
         } else if (item.product) {
 
             const productName = document.createElement("div");
+
             productName.className = "product-name";
             productName.textContent = item.product.name;
 
             productCell.appendChild(productName);
 
+            productCell.appendChild(
+                createDetail(
+                    `${item.product.packages} パッケージ必要`
+                )
+            );
 
-            const packageDetail = document.createElement("div");
-            packageDetail.className = "product-detail";
-
-            packageDetail.textContent =
-                `${formatQuantity(item.product.packages)} パッケージ必要`;
-
-            productCell.appendChild(packageDetail);
-
-
-            // 商品価格
             if (item.product.price !== null) {
-
-                const priceDetail = document.createElement("div");
-                priceDetail.className = "product-detail";
-
-                priceDetail.textContent =
-                    `単価：${Number(item.product.price).toLocaleString()}円`;
-
-                productCell.appendChild(priceDetail);
+                productCell.appendChild(
+                    createDetail(
+                        `単価：${format(item.product.price)}円`
+                    )
+                );
             }
 
-
-            // 小計
             if (item.product.subtotal !== null) {
-
-                const subtotalDetail = document.createElement("div");
-                subtotalDetail.className = "product-detail";
-
-                subtotalDetail.textContent =
-                    `小計：${Number(item.product.subtotal).toLocaleString()}円`;
-
-                productCell.appendChild(subtotalDetail);
+                productCell.appendChild(
+                    createDetail(
+                        `小計：${format(item.product.subtotal)}円`
+                    )
+                );
             }
 
-
-            // 購入リンク
             if (item.product.url) {
 
-                const link = document.createElement("a");
+                try {
+                    const url = new URL(item.product.url);
 
-                link.href = item.product.url;
-                link.target = "_blank";
-                link.rel = "noopener noreferrer";
-                link.className = "product-link";
-                link.textContent = "購入先を見る";
+                    if (["http:", "https:"].includes(url.protocol)) {
 
-                productCell.appendChild(link);
+                        const link = document.createElement("a");
+
+                        link.href = url.href;
+                        link.target = "_blank";
+                        link.rel = "noopener noreferrer";
+                        link.className = "product-link";
+                        link.textContent = "購入先を見る";
+
+                        productCell.appendChild(link);
+                    }
+
+                } catch {
+                    // 不正なURLは表示しない
+                }
             }
 
         } else {
 
             productCell.textContent = "商品未登録";
-
         }
 
         row.appendChild(productCell);
@@ -731,36 +1222,45 @@ function renderResults(result) {
         resultBody.appendChild(row);
     }
 
-
-    // ------------------------------------
-    // 概算金額
-    // ------------------------------------
-
-    const totalPriceElement =
-        document.getElementById("total-price");
-
-    if (result.total_price === null) {
-
-        totalPriceElement.textContent =
-            "概算購入金額：価格未登録の商品があります";
-
-    } else {
-
-        totalPriceElement.textContent =
-            `概算購入金額：${Number(result.total_price).toLocaleString()}円`;
-
-    }
+    setText(
+        "total-price",
+        result.total_price === null
+            ? "概算購入金額：価格未登録の商品があります"
+            : `概算購入金額：${format(result.total_price)}円`
+    );
 }
 
 
 // ========================================
-// フォーム送信
+// イベント
 // ========================================
 
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", event => {
     event.preventDefault();
     calculateSupplies();
 });
+
+document.querySelectorAll(".tab").forEach(tab => {
+
+    tab.addEventListener("click", () => {
+
+        storageType = tab.dataset.storage;
+
+        document.querySelectorAll(".tab").forEach(element => {
+            element.classList.toggle(
+                "active",
+                element === tab
+            );
+        });
+
+        calculateSupplies();
+    });
+});
+
+document.getElementById("sort-by").addEventListener(
+    "change",
+    calculateSupplies
+);
 </script>
 
 </body>
