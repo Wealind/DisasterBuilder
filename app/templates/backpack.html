@@ -1,0 +1,96 @@
+{% extends "layout.html" %}
+
+{% block title %}
+非常持ち出し管理 | Disaster Builder
+{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+
+    <h1>非常持ち出し管理</h1>
+
+    <p>
+        家族ごとの防災リュックと持ち出し用品を管理します。
+    </p>
+
+</div>
+
+
+<div class="metric-grid">
+
+    <div class="metric-card">
+
+        <div class="metric-label">
+            必要用品の推定重量
+        </div>
+
+        <div class="metric-value"
+             id="carry-weight">-</div>
+
+        <div class="progress">
+            <div class="progress-fill"
+                 id="weight-progress"></div>
+        </div>
+
+        <div class="metric-description"
+             id="weight-detail">-</div>
+
+    </div>
+
+    <div class="metric-card">
+
+        <div class="metric-label">
+            必要用品の推定容量
+        </div>
+
+        <div class="metric-value"
+             id="carry-volume">-</div>
+
+        <div class="progress">
+            <div class="progress-fill"
+                 id="volume-progress"></div>
+        </div>
+
+        <div class="metric-description"
+             id="volume-detail">-</div>
+
+    </div>
+
+</div>
+
+<div class="card">
+
+    <div class="toolbar">
+
+        <h2>防災リュック</h2>
+
+        <button class="button" disabled>
+            ＋ リュック追加
+        </button>
+
+    </div>
+
+    <div class="empty-state">
+
+        <div class="empty-icon" data-icon="bag"></div>
+
+        <h3>リュック個別管理は準備中です</h3>
+
+        <p>
+            家族ごとの用品配分・重量・容量を<br>
+            管理できるようになります。
+        </p>
+
+        <a href="/builder"
+           class="button button-outline">
+            必要用品を確認
+        </a>
+
+    </div>
+
+</div>
+
+<p id="page-error" class="error"></p>
+
+{% endblock %}

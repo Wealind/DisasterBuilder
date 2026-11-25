@@ -1,0 +1,107 @@
+{% extends "layout.html" %}
+
+{% block title %}
+防災用品の構成 | Disaster Builder
+{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+
+    <h1>防災用品の構成</h1>
+
+    <p>
+        必要な防災用品・所有数量・不足数量を確認します。
+    </p>
+
+</div>
+
+
+<div class="card household-bar">
+
+    <div class="household-info">
+
+        <span class="chip" id="family-info">-</span>
+        <span class="chip" id="home-days-info">-</span>
+        <span class="chip" id="go-days-info">-</span>
+
+    </div>
+
+    <a href="/settings" class="button button-outline">
+        条件を変更
+    </a>
+
+</div>
+
+
+<div class="toolbar">
+
+    <div class="tabs">
+
+        <button class="tab active" data-storage="all">
+            すべて
+        </button>
+
+        <button class="tab" data-storage="home">
+            自宅備蓄
+        </button>
+
+        <button class="tab" data-storage="go">
+            非常持ち出し
+        </button>
+
+    </div>
+
+    <label>
+        <input type="checkbox" id="missing-only">
+        不足用品のみ
+    </label>
+
+</div>
+
+
+<div class="toolbar">
+
+    <div id="builder-summary" class="muted"></div>
+
+    <select id="sort-by" style="width:180px">
+
+        <option value="category">カテゴリ順</option>
+        <option value="priority">優先度順</option>
+
+    </select>
+
+</div>
+
+<p id="page-error" class="error"></p>
+
+<div id="builder-items">
+
+    <p class="muted">計算中...</p>
+
+</div>
+
+
+<div class="purchase-summary">
+
+    <div>
+
+        <div class="metric-label">
+            概算購入金額（表示区分）
+        </div>
+
+        <div class="metric-value"
+             id="builder-price">-</div>
+
+        <div class="metric-description"
+             id="builder-price-note"></div>
+
+    </div>
+
+    <a href="/shopping" class="button">
+        購入リストを見る
+    </a>
+
+</div>
+
+{% endblock %}

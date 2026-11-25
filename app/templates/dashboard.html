@@ -1,0 +1,231 @@
+{% extends "layout.html" %}
+
+{% block title %}
+ダッシュボード | Disaster Builder
+{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+
+    <h1>わが家の防災状況</h1>
+
+    <p>
+        家庭の備蓄状況と対応が必要な防災用品を確認できます。
+    </p>
+
+</div>
+
+
+<div class="card household-bar">
+
+    <div class="household-info">
+
+        <span class="chip" id="family-info">-</span>
+        <span class="chip" id="home-days-info">-</span>
+        <span class="chip" id="go-days-info">-</span>
+
+    </div>
+
+    <a href="/settings" class="button button-outline">
+        条件を変更
+    </a>
+
+</div>
+
+
+<div class="metric-grid">
+
+    <div class="metric-card">
+
+        <div class="metric-label">
+            自宅備蓄の準備率
+        </div>
+
+        <div class="metric-value text-success"
+             id="home-rate">-</div>
+
+        <div class="progress">
+            <div class="progress-fill"
+                 id="home-progress"></div>
+        </div>
+
+        <div class="metric-description"
+             id="home-detail">計算中</div>
+
+    </div>
+
+    <div class="metric-card">
+
+        <div class="metric-label">
+            非常持ち出しの準備率
+        </div>
+
+        <div class="metric-value text-success"
+             id="go-rate">-</div>
+
+        <div class="progress">
+            <div class="progress-fill"
+                 id="go-progress"></div>
+        </div>
+
+        <div class="metric-description"
+             id="go-detail">計算中</div>
+
+    </div>
+
+    <div class="metric-card">
+
+        <div class="metric-label">
+            期限切れの用品
+        </div>
+
+        <div class="metric-value">-</div>
+
+        <div class="metric-description">
+            期限管理機能は準備中
+        </div>
+
+    </div>
+
+    <div class="metric-card">
+
+        <div class="metric-label">
+            90日以内に期限到来
+        </div>
+
+        <div class="metric-value">-</div>
+
+        <div class="metric-description">
+            期限管理機能は準備中
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="dashboard-grid">
+
+    <div class="card">
+
+        <h2>対応が必要なこと</h2>
+
+        <div class="action-row">
+
+            <div class="action-icon" data-icon="box"></div>
+
+            <div class="action-content">
+
+                <div class="action-title">
+                    不足している防災用品
+                </div>
+
+                <div class="action-description">
+                    必要数量に達していない用品
+                </div>
+
+            </div>
+
+            <div class="action-value text-danger"
+                 id="shortage-count">-</div>
+
+            <a href="/builder?missing=1"
+               class="button button-outline">
+                確認
+            </a>
+
+        </div>
+
+        <div class="action-row">
+
+            <div class="action-icon"
+                 data-icon="calendar"></div>
+
+            <div class="action-content">
+
+                <div class="action-title">
+                    賞味・使用期限の確認
+                </div>
+
+                <div class="action-description">
+                    備蓄用品の交換・補充時期
+                </div>
+
+            </div>
+
+            <a href="/expiry" class="button button-outline">
+                確認
+            </a>
+
+        </div>
+
+        <div class="action-row">
+
+            <div class="action-icon" data-icon="check"></div>
+
+            <div class="action-content">
+
+                <div class="action-title">
+                    防災用品の点検
+                </div>
+
+                <div class="action-description">
+                    充電・動作確認・定期点検
+                </div>
+
+            </div>
+
+            <a href="/expiry" class="button button-outline">
+                確認
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>カテゴリ別準備状況</h2>
+
+        <div id="category-progress">
+            <p class="muted">計算中</p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h2>不足用品の購入</h2>
+
+    <div class="household-bar">
+
+        <div>
+
+            <div class="metric-label">
+                概算購入金額
+            </div>
+
+            <div class="metric-value"
+                 id="dashboard-price">-</div>
+
+            <div class="metric-description"
+                 id="dashboard-price-note"></div>
+
+        </div>
+
+        <a href="/shopping" class="button">
+            購入リストを見る
+        </a>
+
+    </div>
+
+</div>
+
+<p class="error" id="page-error"></p>
+
+{% endblock %}

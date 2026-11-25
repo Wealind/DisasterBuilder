@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+
+{% block title %}
+自宅備蓄管理 | Disaster Builder
+{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+
+    <h1>自宅備蓄管理</h1>
+
+    <p>
+        自宅の防災用品の数量・購入日・賞味期限を管理します。
+    </p>
+
+</div>
+
+<div class="card">
+
+    <div class="toolbar">
+
+        <h2>登録済みの備蓄用品</h2>
+
+        <button class="button" disabled>
+            ＋ 備蓄登録
+        </button>
+
+    </div>
+
+    <div class="empty-state">
+
+        <div class="empty-icon" data-icon="home"></div>
+
+        <h3>備蓄管理機能は準備中です</h3>
+
+        <p>
+            購入日・賞味期限・数量・保管場所を<br>
+            商品ごとに登録できるようになります。
+        </p>
+
+        <a href="/builder"
+           class="button button-outline">
+            現在の所有数量を確認
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

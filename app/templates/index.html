@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -346,6 +345,57 @@
             text-decoration: none;
         }
 
+        /* ========================================
+           商品選択
+           ======================================== */
+
+        .product-select {
+            width: 100%;
+            min-width: 220px;
+            max-width: 320px;
+            padding: 8px;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .product-layout {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .product-image {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+        }
+
+        .product-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .product-subtotal {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .product-surplus {
+            color: #64748b;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .sample-label {
+            color: #92400e;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
         .total-price {
             background: #f8fafc;
             padding: 20px;
@@ -353,6 +403,14 @@
             font-size: 20px;
             font-weight: bold;
             margin-top: 24px;
+        }
+
+        .total-price-note {
+            color: #64748b;
+            font-size: 12px;
+            font-weight: normal;
+            line-height: 1.8;
+            margin-top: 8px;
         }
 
         @media (max-width: 700px) {
@@ -610,7 +668,14 @@
 
         </div>
 
-        <div class="total-price" id="total-price"></div>
+        <div class="total-price">
+
+            <div id="total-price"></div>
+
+            <div class="total-price-note"
+                 id="total-price-note"></div>
+
+        </div>
 
         <p class="note">
             ※ 自宅備蓄と持ち出し用品は別々に確保する計算です。
@@ -650,6 +715,7 @@ let requestSequence = 0;
 
 const HOME_KEY = "disaster_builder_owned_v1";
 const GO_KEY = "disaster_builder_owned_go_v1";
+const PRODUCT_KEY = "disaster_builder_products_v1";
 
 
 // ========================================
@@ -657,7 +723,9 @@ const GO_KEY = "disaster_builder_owned_go_v1";
 // ========================================
 
 function loadOwned(key) {
+
     try {
+
         const saved = JSON.parse(
             localStorage.getItem(key) || "{}"
         );
@@ -665,7 +733,9 @@ function loadOwned(key) {
         const valid = {};
 
         if (saved && typeof saved === "object") {
+
             for (const [id, value] of Object.entries(saved)) {
+
                 const quantity = Number(value);
 
                 if (Number.isFinite(quantity) && quantity >= 0) {
@@ -677,15 +747,20 @@ function loadOwned(key) {
         return valid;
 
     } catch {
+
         return {};
     }
 }
 
+
 const ownedHome = loadOwned(HOME_KEY);
 const ownedGo = loadOwned(GO_KEY);
 
+
 function saveOwned() {
+
     try {
+
         localStorage.setItem(
             HOME_KEY,
             JSON.stringify(ownedHome)
@@ -697,6 +772,64 @@ function saveOwned() {
         );
 
     } catch (error) {
+
+        console.warn(error);
+    }
+}
+
+
+// ========================================
+// 商品選択状態
+// ========================================
+
+function loadSelectedProducts() {
+
+    try {
+
+        const saved = JSON.parse(
+            localStorage.getItem(PRODUCT_KEY) || "{}"
+        );
+
+        const valid = {};
+
+        if (saved && typeof saved === "object") {
+
+            for (const [id, value] of Object.entries(saved)) {
+
+                const productId = Number(value);
+
+                if (
+                    Number.isInteger(productId)
+                    && productId > 0
+                ) {
+                    valid[id] = productId;
+                }
+            }
+        }
+
+        return valid;
+
+    } catch {
+
+        return {};
+    }
+}
+
+
+const selectedProducts = loadSelectedProducts();
+
+
+function saveSelectedProducts() {
+
+    try {
+
+        localStorage.setItem(
+            PRODUCT_KEY,
+            JSON.stringify(selectedProducts)
+        );
+
+    } catch (error) {
+
         console.warn(error);
     }
 }
@@ -707,16 +840,21 @@ function saveOwned() {
 // ========================================
 
 function format(value) {
+
     return Number(value).toLocaleString("ja-JP", {
         maximumFractionDigits: 2
     });
 }
 
+
 function setText(id, value) {
+
     document.getElementById(id).textContent = value;
 }
 
+
 function createCell(text, className = "") {
+
     const cell = document.createElement("td");
 
     cell.textContent = text;
@@ -725,7 +863,9 @@ function createCell(text, className = "") {
     return cell;
 }
 
+
 function createTagCell(text, className) {
+
     const cell = document.createElement("td");
     const tag = document.createElement("span");
 
@@ -737,12 +877,37 @@ function createTagCell(text, className) {
     return cell;
 }
 
+
 function createDetail(text) {
+
     const div = document.createElement("div");
+
     div.className = "product-detail";
     div.textContent = text;
 
     return div;
+}
+
+
+function getSafeUrl(value) {
+
+    if (!value) {
+        return null;
+    }
+
+    try {
+
+        const url = new URL(value);
+
+        if (["http:", "https:"].includes(url.protocol)) {
+            return url.href;
+        }
+
+    } catch {
+        // 不正なURLは使用しない
+    }
+
+    return null;
 }
 
 
@@ -751,7 +916,9 @@ function createDetail(text) {
 // ========================================
 
 function getInputData() {
+
     return {
+
         adults: Number(document.getElementById("adults").value),
         children: Number(document.getElementById("children").value),
 
@@ -775,7 +942,9 @@ function getInputData() {
         sort_by: document.getElementById("sort-by").value,
 
         owned: { ...ownedHome },
-        owned_go: { ...ownedGo }
+        owned_go: { ...ownedGo },
+
+        selected_products: { ...selectedProducts }
     };
 }
 
@@ -791,48 +960,64 @@ async function calculateSupplies() {
     errorElement.textContent = "";
 
     if (!form.reportValidity()) {
+
         button.disabled = false;
         resultsElement.style.display = "none";
+
         return;
     }
 
     const data = getInputData();
 
     if (data.adults + data.children < 1) {
+
         errorElement.textContent = "人数は1人以上にしてください。";
+
         button.disabled = false;
         resultsElement.style.display = "none";
+
         return;
     }
 
     if (data.infants > data.children) {
+
         errorElement.textContent =
             "乳幼児の人数は子供の人数以下にしてください。";
+
         button.disabled = false;
         resultsElement.style.display = "none";
+
         return;
     }
 
     if (data.seniors > data.adults) {
+
         errorElement.textContent =
             "高齢者の人数は大人の人数以下にしてください。";
+
         button.disabled = false;
         resultsElement.style.display = "none";
+
         return;
     }
 
     button.disabled = true;
 
     try {
+
         const response = await fetch("/api/calculate", {
+
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify(data)
         });
 
         if (!response.ok) {
+
             throw new Error(
                 response.status === 422
                     ? "入力内容を確認してください。"
@@ -853,6 +1038,7 @@ async function calculateSupplies() {
     } catch (error) {
 
         if (sequence === requestSequence) {
+
             errorElement.textContent = error.message;
             resultsElement.style.display = "none";
         }
@@ -871,6 +1057,7 @@ async function calculateSupplies() {
 // ========================================
 
 function updateBar(id, percent) {
+
     const bar = document.getElementById(id);
 
     bar.style.width = `${Math.min(100, percent)}%`;
@@ -878,6 +1065,7 @@ function updateBar(id, percent) {
     bar.style.background =
         percent > 100 ? "#dc2626" : "#2563eb";
 }
+
 
 function renderCarry(result) {
 
@@ -900,18 +1088,21 @@ function renderCarry(result) {
     const volumeMessages = [];
 
     if (result.weight_exceeded) {
+
         weightMessages.push(
             "設定した重量上限を超えています。"
         );
     }
 
     if (result.capacity_exceeded) {
+
         volumeMessages.push(
             "設定した容量を超えています。"
         );
     }
 
     if (result.unknown_weight_count > 0) {
+
         weightMessages.push(
             `重量未登録：${result.unknown_weight_count}種類。` +
             "表示値は登録済み分のみです。"
@@ -919,6 +1110,7 @@ function renderCarry(result) {
     }
 
     if (result.unknown_volume_count > 0) {
+
         volumeMessages.push(
             `容量未登録：${result.unknown_volume_count}種類。` +
             "表示値は登録済み分のみです。"
@@ -977,8 +1169,11 @@ function createOwnedInput(item, type) {
         }
 
         if (type === "home") {
+
             ownedHome[String(item.id)] = value;
+
         } else {
+
             ownedGo[String(item.id)] = value;
         }
 
@@ -989,6 +1184,295 @@ function createOwnedInput(item, type) {
     group.append(label, input);
 
     return group;
+}
+
+
+// ========================================
+// 商品選択・商品情報表示
+// ========================================
+
+function createProductCell(item) {
+
+    const productCell = document.createElement("td");
+
+    if (item.shortage <= 0) {
+
+        productCell.textContent = "購入不要";
+
+        return productCell;
+    }
+
+    if (!item.product) {
+
+        productCell.textContent = "商品未登録";
+
+        return productCell;
+    }
+
+    const product = item.product;
+
+    const options = item.product_options || [];
+
+
+    // ====================================
+    // 商品選択プルダウン
+    // ====================================
+
+    const select = document.createElement("select");
+
+    select.className = "product-select";
+
+    select.setAttribute(
+        "aria-label",
+        `${item.name}の商品選択`
+    );
+
+
+    // 自動選択
+
+    const autoOption = document.createElement("option");
+
+    autoOption.value = "auto";
+
+    autoOption.textContent = "自動選択（購入総額が最安）";
+
+    select.appendChild(autoOption);
+
+
+    // 商品候補
+
+    for (const option of options) {
+
+        const element = document.createElement("option");
+
+        element.value = String(option.id);
+
+        const priceText =
+            option.price !== null
+                ? ` ¥${format(option.price)}`
+                : " 価格未登録";
+
+        element.textContent =
+            option.name + priceText;
+
+        select.appendChild(element);
+    }
+
+
+    // 選択状態の復元
+
+    const selectedId = selectedProducts[String(item.id)];
+
+    const validSelection = options.some(
+        option => option.id === selectedId
+    );
+
+    select.value = validSelection
+        ? String(selectedId)
+        : "auto";
+
+
+    // 商品変更
+
+    select.addEventListener("change", () => {
+
+        if (select.value === "auto") {
+
+            delete selectedProducts[String(item.id)];
+
+        } else {
+
+            selectedProducts[String(item.id)] =
+                Number(select.value);
+        }
+
+        saveSelectedProducts();
+
+        calculateSupplies();
+    });
+
+    productCell.appendChild(select);
+
+
+    // ====================================
+    // 商品情報
+    // ====================================
+
+    const layout = document.createElement("div");
+
+    layout.className = "product-layout";
+
+
+    // 商品画像
+
+    const imageUrl = getSafeUrl(product.image_url);
+
+    if (imageUrl) {
+
+        const image = document.createElement("img");
+
+        image.src = imageUrl;
+        image.alt = product.name;
+        image.className = "product-image";
+        image.loading = "lazy";
+
+        image.addEventListener("error", () => {
+            image.remove();
+        });
+
+        layout.appendChild(image);
+    }
+
+
+    const info = document.createElement("div");
+
+    info.className = "product-info";
+
+
+    // 商品名
+
+    const productName = document.createElement("div");
+
+    productName.className = "product-name";
+    productName.textContent = product.name;
+
+    info.appendChild(productName);
+
+
+    // メーカー
+
+    if (product.brand) {
+
+        info.appendChild(
+            createDetail(product.brand)
+        );
+    }
+
+
+    // パッケージ内容量
+
+    info.appendChild(
+        createDetail(
+            `内容量：${format(product.quantity_per_package)} ${item.unit}`
+        )
+    );
+
+
+    // 必要パッケージ数
+
+    info.appendChild(
+        createDetail(
+            `${format(product.packages)} パッケージ必要`
+        )
+    );
+
+
+    // 購入数量
+
+    info.appendChild(
+        createDetail(
+            `購入数量：${format(product.purchase_quantity)} ${item.unit}`
+        )
+    );
+
+
+    // 商品価格
+
+    if (product.price !== null) {
+
+        info.appendChild(
+            createDetail(
+                `商品価格：${format(product.price)}円`
+            )
+        );
+
+    } else {
+
+        info.appendChild(
+            createDetail("商品価格：未登録")
+        );
+    }
+
+
+    // 単価
+
+    if (product.unit_price !== null) {
+
+        info.appendChild(
+            createDetail(
+                `1${item.unit}あたり：${format(product.unit_price)}円`
+            )
+        );
+    }
+
+
+    // 余剰数量
+
+    if (product.surplus_quantity > 0) {
+
+        const surplus = document.createElement("div");
+
+        surplus.className = "product-surplus";
+
+        surplus.textContent =
+            `余剰：${format(product.surplus_quantity)} ${item.unit}`;
+
+        info.appendChild(surplus);
+    }
+
+
+    // 購入小計
+
+    const subtotal = document.createElement("div");
+
+    subtotal.className = "product-subtotal";
+
+    subtotal.textContent =
+        product.subtotal !== null
+            ? `¥${format(product.subtotal)}`
+            : "価格未登録";
+
+    info.appendChild(subtotal);
+
+
+    // 仮データ表示
+
+    if (product.is_sample) {
+
+        const sample = document.createElement("div");
+
+        sample.className = "sample-label";
+
+        sample.textContent = "動作確認用商品・仮価格";
+
+        info.appendChild(sample);
+    }
+
+
+    // 購入先リンク
+
+    const productUrl = getSafeUrl(product.url);
+
+    if (productUrl) {
+
+        const link = document.createElement("a");
+
+        link.href = productUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer sponsored";
+        link.className = "product-link";
+
+        link.textContent = "購入先を見る";
+
+        info.appendChild(link);
+    }
+
+
+    layout.appendChild(info);
+
+    productCell.appendChild(layout);
+
+    return productCell;
 }
 
 
@@ -1023,6 +1507,7 @@ function renderResults(result) {
             sortBy === "category" &&
             item.category !== currentCategory
         ) {
+
             currentCategory = item.category;
 
             const categoryRow = document.createElement("tr");
@@ -1039,7 +1524,10 @@ function renderResults(result) {
 
         const row = document.createElement("tr");
 
+
+        // ====================================
         // 用品名
+        // ====================================
 
         const nameCell = createCell(
             item.name,
@@ -1047,6 +1535,7 @@ function renderResults(result) {
         );
 
         if (sortBy === "priority") {
+
             nameCell.appendChild(
                 createDetail(item.category)
             );
@@ -1054,7 +1543,10 @@ function renderResults(result) {
 
         row.appendChild(nameCell);
 
+
+        // ====================================
         // 区分
+        // ====================================
 
         row.appendChild(
             createTagCell(
@@ -1063,7 +1555,10 @@ function renderResults(result) {
             )
         );
 
+
+        // ====================================
         // 優先度
+        // ====================================
 
         row.appendChild(
             createTagCell(
@@ -1072,7 +1567,10 @@ function renderResults(result) {
             )
         );
 
+
+        // ====================================
         // 必要数量
+        // ====================================
 
         const quantityCell = createCell(
             `${format(item.quantity)} ${item.unit}`,
@@ -1082,6 +1580,7 @@ function renderResults(result) {
         if (storageType === "all") {
 
             if (item.home_required > 0) {
+
                 quantityCell.appendChild(
                     createDetail(
                         `自宅：${format(item.home_required)} ${item.unit}`
@@ -1090,6 +1589,7 @@ function renderResults(result) {
             }
 
             if (item.go_required > 0) {
+
                 quantityCell.appendChild(
                     createDetail(
                         `持出：${format(item.go_required)} ${item.unit}`
@@ -1100,7 +1600,10 @@ function renderResults(result) {
 
         row.appendChild(quantityCell);
 
+
+        // ====================================
         // 所有済み
+        // ====================================
 
         const ownedCell = document.createElement("td");
 
@@ -1108,6 +1611,7 @@ function renderResults(result) {
             storageType !== "go" &&
             item.home_required > 0
         ) {
+
             ownedCell.appendChild(
                 createOwnedInput(item, "home")
             );
@@ -1117,6 +1621,7 @@ function renderResults(result) {
             storageType !== "home" &&
             item.go_required > 0
         ) {
+
             ownedCell.appendChild(
                 createOwnedInput(item, "go")
             );
@@ -1124,7 +1629,10 @@ function renderResults(result) {
 
         row.appendChild(ownedCell);
 
+
+        // ====================================
         // 不足数量
+        // ====================================
 
         row.appendChild(
             createCell(
@@ -1135,11 +1643,15 @@ function renderResults(result) {
             )
         );
 
+
+        // ====================================
         // 持ち出し重量
+        // ====================================
 
         let weightText = "-";
 
         if (storageType !== "home" && item.go_required > 0) {
+
             weightText =
                 item.go_weight === null
                     ? "未登録"
@@ -1150,83 +1662,56 @@ function renderResults(result) {
             createCell(weightText)
         );
 
+
+        // ====================================
         // 購入候補
+        // ====================================
 
-        const productCell = document.createElement("td");
-
-        if (item.shortage === 0) {
-
-            productCell.textContent = "購入不要";
-
-        } else if (item.product) {
-
-            const productName = document.createElement("div");
-
-            productName.className = "product-name";
-            productName.textContent = item.product.name;
-
-            productCell.appendChild(productName);
-
-            productCell.appendChild(
-                createDetail(
-                    `${item.product.packages} パッケージ必要`
-                )
-            );
-
-            if (item.product.price !== null) {
-                productCell.appendChild(
-                    createDetail(
-                        `単価：${format(item.product.price)}円`
-                    )
-                );
-            }
-
-            if (item.product.subtotal !== null) {
-                productCell.appendChild(
-                    createDetail(
-                        `小計：${format(item.product.subtotal)}円`
-                    )
-                );
-            }
-
-            if (item.product.url) {
-
-                try {
-                    const url = new URL(item.product.url);
-
-                    if (["http:", "https:"].includes(url.protocol)) {
-
-                        const link = document.createElement("a");
-
-                        link.href = url.href;
-                        link.target = "_blank";
-                        link.rel = "noopener noreferrer";
-                        link.className = "product-link";
-                        link.textContent = "購入先を見る";
-
-                        productCell.appendChild(link);
-                    }
-
-                } catch {
-                    // 不正なURLは表示しない
-                }
-            }
-
-        } else {
-
-            productCell.textContent = "商品未登録";
-        }
-
-        row.appendChild(productCell);
+        row.appendChild(
+            createProductCell(item)
+        );
 
         resultBody.appendChild(row);
     }
 
+
+    // ========================================
+    // 合計金額
+    // ========================================
+
+    const totalPrice = result.known_total_price ?? 0;
+
+    const priceLabel =
+        storageType === "home"
+            ? "自宅備蓄の概算購入金額"
+            : storageType === "go"
+                ? "非常持ち出しの概算購入金額"
+                : "概算購入金額";
+
     setText(
         "total-price",
-        result.total_price === null
-            ? "概算購入金額：価格未登録の商品があります"
-            : `概算購入金額：${format(result.total_price)}円`
+        `${priceLabel}：¥${format(totalPrice)}`
+    );
+
+    const priceNotes = [];
+
+    if (result.has_unpriced_items) {
+
+        priceNotes.push(
+            "※ 商品・価格未登録の用品は合計金額に含まれていません。"
+        );
+    }
+
+    if (result.has_sample_products) {
+
+        priceNotes.push(
+            "※ 動作確認用の仮価格を含みます。"
+        );
+    }
+
+    setText(
+        "total-price-note",
+        priceNotes.join(" ")
     );
 }
 
@@ -1236,9 +1721,12 @@ function renderResults(result) {
 // ========================================
 
 form.addEventListener("submit", event => {
+
     event.preventDefault();
+
     calculateSupplies();
 });
+
 
 document.querySelectorAll(".tab").forEach(tab => {
 
@@ -1247,6 +1735,7 @@ document.querySelectorAll(".tab").forEach(tab => {
         storageType = tab.dataset.storage;
 
         document.querySelectorAll(".tab").forEach(element => {
+
             element.classList.toggle(
                 "active",
                 element === tab
@@ -1257,10 +1746,12 @@ document.querySelectorAll(".tab").forEach(tab => {
     });
 });
 
+
 document.getElementById("sort-by").addEventListener(
     "change",
     calculateSupplies
 );
+
 </script>
 
 </body>

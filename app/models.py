@@ -6,6 +6,7 @@ from sqlalchemy import (
     Boolean,
     ForeignKey,
 )
+
 from sqlalchemy.orm import relationship
 
 from app.database import Base
@@ -85,10 +86,24 @@ class Product(Base):
     )
 
     name = Column(String(200), nullable=False)
+
+    # 商品識別情報
+    asin = Column(String(20), nullable=True, unique=True)
+    brand = Column(String(200), nullable=True)
+
+    # 1パッケージあたりの数量
     quantity_per_package = Column(Float, nullable=False)
 
+    # 商品価格
     price = Column(Integer, nullable=True)
+
+    # 商品画像・購入先
+    image_url = Column(String(2000), nullable=True)
     product_url = Column(String(1000), nullable=True)
+
+    # 1パッケージあたりの重量・容量
+    weight_kg = Column(Float, nullable=True)
+    volume_l = Column(Float, nullable=True)
 
     is_active = Column(Boolean, nullable=False, default=True)
 

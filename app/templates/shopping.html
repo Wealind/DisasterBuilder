@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+
+{% block title %}
+購入リスト | Disaster Builder
+{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+
+    <h1>購入リスト</h1>
+
+    <p>
+        不足している防災用品と購入候補を確認できます。
+    </p>
+
+</div>
+
+<div class="card">
+
+    <div class="metric-label">
+        概算購入金額
+    </div>
+
+    <div class="metric-value"
+         id="shopping-price">-</div>
+
+    <div class="metric-description"
+         id="shopping-price-note"></div>
+
+</div>
+
+<div class="card">
+
+    <div class="toolbar">
+
+        <h2>不足用品一覧</h2>
+
+        <a href="/builder"
+           class="button button-outline">
+            構成を変更
+        </a>
+
+    </div>
+
+    <div id="shopping-items">
+
+        <p class="muted">計算中...</p>
+
+    </div>
+
+</div>
+
+<p id="page-error" class="error"></p>
+
+{% endblock %}

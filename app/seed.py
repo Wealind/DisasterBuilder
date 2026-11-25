@@ -263,16 +263,54 @@ GO_ITEMS = [
 
 
 # ========================================
-# 商品マスター（仮データ）
+# 商品マスター（動作確認用）
+# ========================================
+#
+# item_name
+# product_name
+# quantity_per_package
+# price
+#
+# 商品名・価格は動作確認用の仮データ
 # ========================================
 
 PRODUCTS = [
-    ("飲料水", "保存水 2L×6本", 12),
-    ("非常食", "非常食 12食セット", 12),
-    ("携帯トイレ", "携帯トイレ 50回分", 50),
-    ("懐中電灯", "LED懐中電灯", 1),
-    ("アルミブランケット", "アルミブランケット 5枚セット", 5),
-    ("防災リュック", "防災用リュック", 1),
+
+    # 飲料水
+
+    ("飲料水", "保存水 2L×6本", 12, 1680),
+    ("飲料水", "保存水 500ml×24本", 12, 2480),
+    ("飲料水", "保存水 2L×9本", 18, 2280),
+
+    # 非常食
+
+    ("非常食", "非常食 12食セット", 12, 4200),
+    ("非常食", "非常食 21食セット", 21, 6980),
+    ("非常食", "非常食 30食セット", 30, 8980),
+
+    # 携帯トイレ
+
+    ("携帯トイレ", "携帯トイレ 50回分", 50, 2980),
+    ("携帯トイレ", "携帯トイレ 100回分", 100, 4980),
+    ("携帯トイレ", "携帯トイレ 150回分", 150, 6980),
+
+    # 懐中電灯
+
+    ("懐中電灯", "LED懐中電灯", 1, 1280),
+    ("懐中電灯", "LED懐中電灯 2個セット", 2, 1980),
+    ("懐中電灯", "LED充電式懐中電灯", 1, 2980),
+
+    # アルミブランケット
+
+    ("アルミブランケット", "アルミブランケット 5枚セット", 5, 980),
+    ("アルミブランケット", "アルミブランケット 10枚セット", 10, 1580),
+    ("アルミブランケット", "厚手アルミブランケット", 1, 680),
+
+    # 防災リュック
+
+    ("防災リュック", "防災用リュック", 1, 2980),
+    ("防災リュック", "防災用リュック 30L", 1, 3980),
+    ("防災リュック", "防災用リュック 40L", 1, 4980),
 ]
 
 
@@ -441,7 +479,7 @@ def seed_data():
 
 
         # ====================================
-        # 商品マスター登録
+        # 商品マスター登録・更新
         # ====================================
 
         items = {
@@ -450,8 +488,9 @@ def seed_data():
         }
 
         added_products = 0
+        updated_products = 0
 
-        for item_name, name, quantity in PRODUCTS:
+        for item_name, name, quantity, price in PRODUCTS:
 
             item = items[item_name]
 
@@ -460,6 +499,7 @@ def seed_data():
                 .filter_by(
                     item_id=item.id,
                     name=name,
+                    asin=None,
                 )
                 .first()
             )
@@ -470,13 +510,21 @@ def seed_data():
                     item_id=item.id,
                     name=name,
                     quantity_per_package=quantity,
-                    price=None,
+                    price=price,
                     product_url=None,
+                    is_active=True,
                 )
 
                 db.add(product)
 
                 added_products += 1
+
+            else:
+
+                product.quantity_per_package = quantity
+                product.price = price
+
+                updated_products += 1
 
 
         # ====================================
@@ -486,6 +534,7 @@ def seed_data():
         db.commit()
 
         print("New products:", added_products)
+        print("Updated products:", updated_products)
         print("Disaster master data updated successfully.")
 
     except Exception:

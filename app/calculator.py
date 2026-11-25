@@ -18,23 +18,29 @@ def calculate_quantity(
     target_count,
     days,
 ):
+
     if calc_type in ("person_day", "pet_day"):
+
         quantity = (
             target_count * days * (daily_rate or 0)
         )
 
     elif calc_type == "group_day":
+
         quantity = days * (daily_rate or 0)
 
     elif calc_type == "person":
+
         quantity = target_count * (
             fixed_rate if fixed_rate is not None else 1
         )
 
     elif calc_type == "fixed":
+
         quantity = fixed_rate or 0
 
     else:
+
         raise ValueError(
             f"Unknown calculation type: {calc_type}"
         )
@@ -56,11 +62,14 @@ def calculate_supplies(
     max_carry_weight: float = 10,
     owned_go: dict | None = None,
     sort_by: str = "category",
+    selected_products: dict | None = None,
 ):
+
     people = adults + children
 
     owned = owned or {}
     owned_go = owned_go or {}
+    selected_products = selected_products or {}
 
     group_counts = {
         "all": people,
@@ -72,6 +81,11 @@ def calculate_supplies(
     db = SessionLocal()
 
     try:
+
+        # ====================================
+        # 用品マスター
+        # ====================================
+
         items = (
             db.query(Item)
             .join(Category)
@@ -83,6 +97,10 @@ def calculate_supplies(
             .all()
         )
 
+        # ====================================
+        # 商品マスター
+        # ====================================
+
         products = (
             db.query(Product)
             .filter(
@@ -93,18 +111,20 @@ def calculate_supplies(
             .all()
         )
 
-        product_by_item = {}
+        products_by_item = {}
 
         for product in products:
-            product_by_item.setdefault(
+
+            products_by_item.setdefault(
                 product.item_id,
-                product,
-            )
+                [],
+            ).append(product)
 
         results = []
 
         total_price = 0
         has_unpriced_items = False
+        has_sample_products = False
 
         total_go_weight = 0
         total_go_volume = 0
@@ -115,7 +135,11 @@ def calculate_supplies(
         for item in items:
 
             condition = item.condition_type or "all"
-            target_count = group_counts.get(condition, 0)
+
+            target_count = group_counts.get(
+                condition,
+                0,
+            )
 
             if target_count <= 0:
                 continue
@@ -129,6 +153,7 @@ def calculate_supplies(
             home_required = 0
 
             if item_storage in ("home", "both"):
+
                 home_required = calculate_quantity(
                     item.calculation_type,
                     item.quantity_per_person_day,
@@ -144,6 +169,7 @@ def calculate_supplies(
             go_required = 0
 
             if item_storage in ("go", "both"):
+
                 go_required = calculate_quantity(
                     item.go_calculation_type
                     or item.calculation_type,
@@ -170,6 +196,7 @@ def calculate_supplies(
             if go_required > 0:
 
                 if item.weight_kg is not None:
+
                     go_weight = (
                         go_required * item.weight_kg
                     )
@@ -177,9 +204,11 @@ def calculate_supplies(
                     total_go_weight += go_weight
 
                 else:
+
                     unknown_weight_count += 1
 
                 if item.volume_l is not None:
+
                     go_volume = (
                         go_required * item.volume_l
                     )
@@ -187,6 +216,7 @@ def calculate_supplies(
                     total_go_volume += go_volume
 
                 else:
+
                     unknown_volume_count += 1
 
             # ====================================
@@ -249,46 +279,148 @@ def calculate_supplies(
                 )
 
             # ====================================
-            # 商品選定
+            # 商品候補の計算
             # ====================================
 
-            product = product_by_item.get(item.id)
-            product_data = None
+            candidates = products_by_item.get(
+                item.id,
+                [],
+            )
 
-            if product:
+            product_options = []
+
+            for product in candidates:
 
                 packages = math.ceil(
                     shortage / product.quantity_per_package
                 )
 
+                purchase_quantity = (
+                    packages
+                    * product.quantity_per_package
+                )
+
                 subtotal = None
+                unit_price = None
 
                 if product.price is not None:
-                    subtotal = packages * product.price
-                    total_price += subtotal
 
-                elif packages > 0:
-                    has_unpriced_items = True
+                    subtotal = (
+                        packages * product.price
+                    )
 
-                product_data = {
+                    unit_price = round(
+                        product.price
+                        / product.quantity_per_package,
+                        2,
+                    )
+
+                product_options.append({
+
                     "id": product.id,
                     "name": product.name,
+
+                    "asin": product.asin,
+                    "brand": product.brand,
+
+                    "image_url": product.image_url,
+                    "url": product.product_url,
+
                     "quantity_per_package":
                         product.quantity_per_package,
+
                     "price": product.price,
-                    "url": product.product_url,
+                    "unit_price": unit_price,
+
                     "packages": packages,
                     "subtotal": subtotal,
-                }
 
-            elif shortage > 0:
-                has_unpriced_items = True
+                    "purchase_quantity":
+                        purchase_quantity,
+
+                    "surplus_quantity": max(
+                        0,
+                        purchase_quantity - shortage,
+                    ),
+
+                    "weight_kg": product.weight_kg,
+                    "volume_l": product.volume_l,
+
+                    "is_sample": product.asin is None,
+                })
+
+            # ====================================
+            # 購入総額が安い順に並び替え
+            # ====================================
+
+            product_options.sort(
+                key=lambda product: (
+
+                    product["subtotal"] is None,
+
+                    product["subtotal"]
+                    if product["subtotal"] is not None
+                    else float("inf"),
+
+                    product["surplus_quantity"],
+
+                    product["id"],
+                )
+            )
+
+            # ====================================
+            # 選択商品の取得
+            # ====================================
+
+            selected_id = selected_products.get(
+                str(item.id)
+            )
+
+            product_data = next(
+                (
+                    product
+                    for product in product_options
+                    if product["id"] == selected_id
+                ),
+                None,
+            )
+
+            # 未選択の場合は購入総額が最も安い商品
+
+            if product_data is None and product_options:
+
+                product_data = product_options[0]
+
+            # ====================================
+            # 合計金額
+            # ====================================
+
+            if shortage > 0:
+
+                if product_data is not None:
+
+                    if product_data["subtotal"] is not None:
+
+                        total_price += product_data["subtotal"]
+
+                    else:
+
+                        has_unpriced_items = True
+
+                    if product_data["is_sample"]:
+
+                        has_sample_products = True
+
+                else:
+
+                    has_unpriced_items = True
 
             # ====================================
             # 結果
             # ====================================
 
             results.append({
+
                 "id": item.id,
                 "category": item.category.name,
                 "name": item.name,
@@ -325,10 +457,15 @@ def calculate_supplies(
                 ),
 
                 "storage_type": item_storage,
-                "priority": item.priority or "recommended",
+
+                "priority":
+                    item.priority or "recommended",
+
                 "condition_type": condition,
 
                 "product": product_data,
+
+                "product_options": product_options,
             })
 
         # ========================================
@@ -336,11 +473,15 @@ def calculate_supplies(
         # ========================================
 
         if sort_by == "priority":
+
             results.sort(
                 key=lambda item: (
+
                     item["shortage"] <= 0,
+
                     PRIORITY_ORDER.get(
-                        item["priority"], 99
+                        item["priority"],
+                        99,
                     ),
                 )
             )
@@ -357,7 +498,12 @@ def calculate_supplies(
             total_go_weight / max_carry_weight * 100
         )
 
+        # ========================================
+        # API返却データ
+        # ========================================
+
         return {
+
             "adults": adults,
             "children": children,
             "people": people,
@@ -378,14 +524,34 @@ def calculate_supplies(
                 else total_price
             ),
 
+            "known_total_price": total_price,
+
+            "has_unpriced_items": has_unpriced_items,
+
+            "has_sample_products": has_sample_products,
+
             "backpack_capacity": backpack_capacity,
             "max_carry_weight": max_carry_weight,
 
-            "total_go_weight": round(total_go_weight, 2),
-            "total_go_volume": round(total_go_volume, 2),
+            "total_go_weight": round(
+                total_go_weight,
+                2,
+            ),
 
-            "capacity_usage": round(capacity_usage, 1),
-            "weight_usage": round(weight_usage, 1),
+            "total_go_volume": round(
+                total_go_volume,
+                2,
+            ),
+
+            "capacity_usage": round(
+                capacity_usage,
+                1,
+            ),
+
+            "weight_usage": round(
+                weight_usage,
+                1,
+            ),
 
             "capacity_exceeded":
                 total_go_volume > backpack_capacity,
@@ -393,9 +559,13 @@ def calculate_supplies(
             "weight_exceeded":
                 total_go_weight > max_carry_weight,
 
-            "unknown_weight_count": unknown_weight_count,
-            "unknown_volume_count": unknown_volume_count,
+            "unknown_weight_count":
+                unknown_weight_count,
+
+            "unknown_volume_count":
+                unknown_volume_count,
         }
 
     finally:
+
         db.close()

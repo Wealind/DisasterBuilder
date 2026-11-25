@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}
+期限・点検管理 | Disaster Builder
+{% endblock %}
+
+{% block content %}
+
+<div class="page-heading">
+
+    <h1>期限・点検管理</h1>
+
+    <p>
+        賞味期限・使用期限・交換時期・定期点検を管理します。
+    </p>
+
+</div>
+
+<div class="metric-grid">
+
+    {% for label in [
+        "期限切れ",
+        "30日以内",
+        "90日以内",
+        "点検対象"
+    ] %}
+
+        <div class="metric-card">
+
+            <div class="metric-label">
+                {{ label }}
+            </div>
+
+            <div class="metric-value">-</div>
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+<div class="card">
+
+    <h2>対応スケジュール</h2>
+
+    <div class="empty-state">
+
+        <div class="empty-icon"
+             data-icon="calendar"></div>
+
+        <h3>期限・点検管理は準備中です</h3>
+
+        <p>
+            購入日や賞味期限の登録後に、<br>
+            対応が必要な用品を自動表示します。
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}
