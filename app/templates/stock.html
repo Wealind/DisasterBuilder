@@ -6,46 +6,250 @@
 
 {% block content %}
 
+<link rel="stylesheet"
+      href="{{ url_for('static', path='/css/stock.css') }}">
+
 <div class="page-heading">
-
     <h1>自宅備蓄管理</h1>
-
-    <p>
-        自宅の防災用品の数量・購入日・賞味期限を管理します。
-    </p>
-
+    <p>自宅に保管している防災用品を管理します。</p>
 </div>
 
-<div class="card">
+<!-- 上部集計 -->
 
-    <div class="toolbar">
+<div class="stock-metrics">
 
-        <h2>登録済みの備蓄用品</h2>
+    <!-- 左側50%：備蓄の準備状況 -->
 
-        <button class="button" disabled>
-            ＋ 備蓄登録
+    <div class="stock-metric-preparation">
+
+        <div class="stock-metric-title">
+            備蓄の準備状況
+        </div>
+
+        <button type="button"
+                class="stock-preparation-button"
+                data-stock-filter="short">
+
+            <div class="stock-preparation-values">
+
+                <div class="stock-preparation-count">
+                    <strong id="stock-completed">0</strong>
+                    <span id="stock-required-types">
+                        / 0種類
+                    </span>
+                </div>
+
+                <span id="stock-shortage"
+                      class="stock-shortage">
+                    残り0種類
+                </span>
+
+            </div>
+
+            <div class="stock-progress">
+                <div class="stock-progress-fill"
+                     id="stock-preparation-progress"
+                     style="width: 0%">
+                </div>
+            </div>
+
         </button>
 
     </div>
 
-    <div class="empty-state">
+    <!-- 右側50%：期限管理 -->
 
-        <div class="empty-icon" data-icon="home"></div>
+    <div class="stock-metric-expiry">
 
-        <h3>備蓄管理機能は準備中です</h3>
+        <div class="stock-metric-title">
+            期限管理
+        </div>
 
-        <p>
-            購入日・賞味期限・数量・保管場所を<br>
-            商品ごとに登録できるようになります。
-        </p>
+        <div class="stock-expiry-metrics">
 
-        <a href="/builder"
-           class="button button-outline">
-            現在の所有数量を確認
-        </a>
+            <button type="button"
+                    class="stock-expiry-metric stock-danger"
+                    data-stock-filter="expired">
+
+                <span class="stock-expiry-label">
+                    期限切れ
+                </span>
+
+                <span class="stock-expiry-value">
+                    <strong id="stock-expired">0</strong>
+                    <span>件</span>
+                </span>
+
+            </button>
+
+            <button type="button"
+                    class="stock-expiry-metric stock-shortage"
+                    data-stock-filter="soon">
+
+                <span class="stock-expiry-label">
+                    期限間近
+                </span>
+
+                <span class="stock-expiry-value">
+                    <strong id="stock-expiring">0</strong>
+                    <span>件</span>
+                </span>
+
+            </button>
+
+            <button type="button"
+                    class="stock-expiry-metric stock-warning"
+                    data-stock-filter="unknown">
+
+                <span class="stock-expiry-label">
+                    期限未確認
+                </span>
+
+                <span class="stock-expiry-value">
+                    <strong id="stock-unknown">0</strong>
+                    <span>件</span>
+                </span>
+
+            </button>
+
+        </div>
 
     </div>
 
 </div>
+
+<!-- 既存のツールバー -->
+
+<div class="stock-toolbar">
+
+    <select id="stock-category">
+        <option value="all">すべてのカテゴリ</option>
+    </select>
+
+    <select id="stock-filter">
+        <option value="all">すべて</option>
+        <option value="short">不足のみ</option>
+        <option value="expired">期限切れ</option>
+        <option value="soon">期限間近</option>
+        <option value="unknown">期限未確認</option>
+    </select>
+
+    <button type="button"
+            class="button"
+            id="stock-add">
+        ＋ 備蓄を登録
+    </button>
+
+</div>
+
+<p id="stock-error" class="error"></p>
+
+<!-- 備蓄用品一覧 -->
+
+<div id="stock-items">
+    <p class="muted">読み込み中...</p>
+</div>
+
+<!-- 登録・編集ダイアログ -->
+
+<dialog id="stock-dialog" class="stock-dialog">
+
+    <form id="stock-form">
+
+        <h2 id="stock-dialog-title">備蓄の登録</h2>
+
+        <label for="stock-item">用品の種類</label>
+        <select id="stock-item" required></select>
+
+        <div id="stock-detail-fields">
+
+            <label for="stock-name">商品名</label>
+
+            <input id="stock-name"
+                   type="text"
+                   placeholder="不明の場合は空欄">
+
+        </div>
+
+        <label for="stock-quantity">
+            数量
+            <span id="stock-unit"></span>
+        </label>
+
+        <input id="stock-quantity"
+               type="number"
+               min="0.000001"
+               step="any"
+               required>
+
+        <div id="stock-date-fields">
+
+            <label for="stock-purchased">購入日</label>
+            <input id="stock-purchased" type="date">
+
+            <label for="stock-expiry-mode">期限管理</label>
+
+            <select id="stock-expiry-mode">
+                <option value="unknown">
+                    期限未確認
+                </option>
+                <option value="date">
+                    期限を登録する
+                </option>
+                <option value="none">
+                    期限管理対象外
+                </option>
+            </select>
+
+            <div id="stock-expiry-field" hidden>
+
+                <label for="stock-expiry">
+                    賞味期限・使用期限
+                </label>
+
+                <input id="stock-expiry" type="date">
+
+            </div>
+
+            <label for="stock-location">保管場所</label>
+
+            <input id="stock-location"
+                   type="text"
+                   placeholder="例：キッチン収納">
+
+        </div>
+
+        <div id="stock-reason-field" hidden>
+
+            <label for="stock-reason">理由</label>
+
+            <select id="stock-reason">
+                <option value="consume">消費</option>
+                <option value="discard">廃棄</option>
+            </select>
+
+        </div>
+
+        <p id="stock-dialog-error" class="error"></p>
+
+        <div class="stock-dialog-actions">
+
+            <button type="button"
+                    class="button button-outline"
+                    id="stock-cancel">
+                キャンセル
+            </button>
+
+            <button type="submit"
+                    class="button"
+                    id="stock-submit">
+                登録する
+            </button>
+
+        </div>
+
+    </form>
+
+</dialog>
 
 {% endblock %}

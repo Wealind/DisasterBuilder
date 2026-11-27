@@ -6,91 +6,621 @@
 
 {% block content %}
 
+<link rel="stylesheet"
+      href="{{ url_for('static', path='/css/backpack.css') }}">
+
+<script defer
+        src="{{ url_for('static', path='/js/backpack.js') }}">
+</script>
+
 <div class="page-heading">
 
     <h1>非常持ち出し管理</h1>
 
     <p>
-        家族ごとの防災リュックと持ち出し用品を管理します。
+        わが家の防災リュックと収納用品を管理します。
     </p>
 
 </div>
 
 
-<div class="metric-grid">
+<!-- 準備状況・期限管理 -->
 
-    <div class="metric-card">
+<div class="bp-metrics">
 
-        <div class="metric-label">
-            必要用品の推定重量
+    <div class="bp-preparation">
+
+        <div class="bp-metric-title">
+            備蓄の準備状況
         </div>
 
-        <div class="metric-value"
-             id="carry-weight">-</div>
+        <div class="bp-preparation-values">
 
-        <div class="progress">
-            <div class="progress-fill"
-                 id="weight-progress"></div>
+            <div>
+                <strong id="bp-completed">0</strong>
+                <span id="bp-required-types">/ 0種類</span>
+            </div>
+
+            <span id="bp-shortage">
+                残り0種類
+            </span>
+
         </div>
 
-        <div class="metric-description"
-             id="weight-detail">-</div>
+        <div class="bp-progress">
+
+            <div class="bp-progress-fill"
+                 id="bp-preparation-progress">
+            </div>
+
+        </div>
 
     </div>
 
-    <div class="metric-card">
 
-        <div class="metric-label">
-            必要用品の推定容量
+    <div class="bp-expiry">
+
+        <div class="bp-metric-title">
+            期限管理
         </div>
 
-        <div class="metric-value"
-             id="carry-volume">-</div>
+        <div class="bp-expiry-grid">
 
-        <div class="progress">
-            <div class="progress-fill"
-                 id="volume-progress"></div>
+            <div class="bp-expiry-cell bp-danger">
+                <span>期限切れ</span>
+                <div><strong id="bp-expired">-</strong>件</div>
+            </div>
+
+            <div class="bp-expiry-cell bp-warning">
+                <span>期限間近</span>
+                <div><strong id="bp-expiring">-</strong>件</div>
+            </div>
+
+            <div class="bp-expiry-cell bp-unknown">
+                <span>期限未確認</span>
+                <div><strong id="bp-unknown">-</strong>件</div>
+            </div>
+
         </div>
-
-        <div class="metric-description"
-             id="volume-detail">-</div>
 
     </div>
 
 </div>
 
-<div class="card">
 
-    <div class="toolbar">
+<!-- リュック選択 -->
 
-        <h2>防災リュック</h2>
+<div class="bp-toolbar">
 
-        <button class="button" disabled>
-            ＋ リュック追加
+    <div id="bp-tabs"
+         class="bp-tabs">
+    </div>
+
+    <button type="button"
+            class="button button-outline"
+            id="bp-add-bag"
+            disabled>
+        ＋ リュック追加
+    </button>
+
+</div>
+
+
+<!-- リュック構成 -->
+
+<div class="bp-workspace">
+
+    <div class="bp-workspace-heading">
+
+        <h2 id="bp-bag-name">
+            防災リュック
+        </h2>
+
+        <button type="button"
+                class="bp-small-button"
+                id="bp-edit-bag"
+                disabled>
+            編集
         </button>
 
     </div>
 
-    <div class="empty-state">
 
-        <div class="empty-icon" data-icon="bag"></div>
+    <div class="bp-workspace-body">
 
-        <h3>リュック個別管理は準備中です</h3>
+        <!-- 左側：リュック -->
 
-        <p>
-            家族ごとの用品配分・重量・容量を<br>
-            管理できるようになります。
-        </p>
+        <div class="bp-bag-panel">
 
-        <a href="/builder"
-           class="button button-outline">
-            必要用品を確認
-        </a>
+            <div class="bp-bag-image"
+                 id="bp-bag-image">
+            </div>
 
+            <div class="bp-bag-description">
+
+                <strong id="bp-bag-capacity">
+                    -
+                </strong>
+
+                <span id="bp-bag-base-weight">
+                    本体重量 -
+                </span>
+
+            </div>
+
+
+            <div class="bp-bag-stat">
+
+                <div class="bp-stat-label">
+                    総重量（推定）
+                </div>
+
+                <div class="bp-stat-value">
+
+                    <strong id="bp-weight">-</strong>
+
+                    <span id="bp-weight-limit">
+                        / - kg
+                    </span>
+
+                </div>
+
+                <div class="bp-progress">
+
+                    <div class="bp-progress-fill"
+                         id="bp-weight-progress">
+                    </div>
+
+                </div>
+
+                <div class="bp-stat-note"
+                     id="bp-weight-note">
+                </div>
+
+            </div>
+
+
+            <div class="bp-bag-stat">
+
+                <div class="bp-stat-label">
+                    使用容量（推定）
+                </div>
+
+                <div class="bp-stat-value">
+
+                    <strong id="bp-volume">-</strong>
+
+                    <span id="bp-volume-limit">
+                        / - L
+                    </span>
+
+                </div>
+
+                <div class="bp-progress">
+
+                    <div class="bp-progress-fill"
+                         id="bp-volume-progress">
+                    </div>
+
+                </div>
+
+                <div class="bp-stat-note"
+                     id="bp-volume-note">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- 右側：収納用品 -->
+
+        <div class="bp-items-panel">
+
+            <div class="bp-items-heading">
+
+                <h3>収納用品</h3>
+
+                <span id="bp-item-count">
+                    0種類
+                </span>
+
+            </div>
+
+            <div class="bp-items-grid"
+                 id="bp-items">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- 商品詳細 -->
+
+    <div class="bp-item-detail"
+         id="bp-item-detail"
+         hidden>
     </div>
 
 </div>
 
-<p id="page-error" class="error"></p>
+
+<!-- 未収納用品 -->
+
+<div class="bp-unassigned">
+
+    <div class="bp-unassigned-heading">
+
+        <div>
+
+            <h3>未収納用品</h3>
+
+            <p>
+                所有しているがリュックに入れていない用品
+            </p>
+
+        </div>
+
+        <strong id="bp-unassigned-count">
+            0種類
+        </strong>
+
+    </div>
+
+    <div id="bp-unassigned-items"
+         class="bp-unassigned-items">
+    </div>
+
+</div>
+
+
+<div id="bp-error"
+     class="bp-error"
+     hidden>
+</div>
+
+
+<dialog id="bp-bag-dialog" class="bp-bag-dialog">
+
+    <form id="bp-bag-form">
+
+        <h2 id="bp-dialog-title">リュック登録</h2>
+
+        <label>
+            リュック名称
+            <input id="bp-form-name" type="text"
+                   maxlength="80" required>
+        </label>
+
+        <label>
+            使用者
+            <input id="bp-form-owner" type="text"
+                   placeholder="大人①、子供など">
+        </label>
+
+        <div class="bp-form-grid">
+
+            <label>
+                容量（L）
+                <input id="bp-form-capacity" type="number"
+                       min="0.1" max="1000" step="any" required>
+            </label>
+
+            <label>
+                本体重量（kg）
+                <input id="bp-form-weight" type="number"
+                       min="0" step="any"
+                       placeholder="不明の場合は空欄">
+            </label>
+
+            <label>
+                持ち運び重量上限（kg）
+                <input id="bp-form-limit" type="number"
+                       min="0.1" max="500" step="any" required>
+            </label>
+
+            <label>
+                保管場所
+                <input id="bp-form-location" type="text"
+                       placeholder="玄関など">
+            </label>
+
+        </div>
+
+        <label>
+            商品画像URL（任意）
+            <input id="bp-form-image" type="url"
+                   placeholder="https://...">
+        </label>
+
+        <p class="bp-detail-note">
+            商品画像が未設定の場合は共通実写画像を使用します。
+        </p>
+
+        <p id="bp-form-error" class="bp-danger" hidden></p>
+
+        <div class="bp-dialog-actions">
+
+            <button type="button"
+                    id="bp-delete-bag"
+                    class="bp-delete-button">
+                削除
+            </button>
+
+            <div class="bp-dialog-actions-right">
+
+                <button type="button"
+                        id="bp-cancel-bag"
+                        class="button button-outline">
+                    キャンセル
+                </button>
+
+                <button type="submit"
+                        class="button"
+                        id="bp-save-bag">
+                    保存する
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</dialog>
+
+<!-- ========================================
+     収納用品登録・編集ダイアログ
+========================================= -->
+
+<dialog id="bp-lot-dialog"
+        class="bp-bag-dialog bp-lot-dialog">
+
+    <form id="bp-lot-form">
+
+        <h2 id="bp-lot-dialog-title">
+            収納用品を登録
+        </h2>
+
+        <div class="bp-lot-form-heading">
+
+            <div id="bp-lot-form-image"
+                 class="bp-lot-form-image">
+            </div>
+
+            <div>
+
+                <div id="bp-lot-form-category"
+                     class="bp-detail-note">
+                </div>
+
+                <strong id="bp-lot-form-item-name">
+                </strong>
+
+                <div id="bp-lot-form-required"
+                     class="bp-detail-note">
+                </div>
+
+                <div id="bp-lot-form-bag-name"
+                     class="bp-detail-note">
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="bp-lot-detail-fields">
+
+            <label>
+                商品名
+
+                <input id="bp-lot-name"
+                       type="text"
+                       maxlength="150">
+            </label>
+
+        </div>
+
+        <label>
+
+            <span id="bp-lot-quantity-label">
+                収納数量
+            </span>
+
+            <input id="bp-lot-quantity"
+                   type="number"
+                   min="0.000001"
+                   step="any"
+                   required>
+
+        </label>
+
+        <div id="bp-lot-registration-fields">
+
+            <div class="bp-form-grid">
+
+                <label>
+                    購入日
+
+                    <input id="bp-lot-purchased"
+                           type="date">
+                </label>
+
+                <label>
+                    使用期限
+
+                    <select id="bp-lot-expiry-mode">
+
+                        <option value="unknown">
+                            期限未確認
+                        </option>
+
+                        <option value="date">
+                            期限を指定
+                        </option>
+
+                        <option value="none">
+                            期限なし
+                        </option>
+
+                    </select>
+
+                </label>
+
+            </div>
+
+            <label id="bp-lot-expiry-field" hidden>
+
+                使用期限の日付
+
+                <input id="bp-lot-expiry"
+                       type="date">
+
+            </label>
+
+            <div class="bp-lot-section-heading">
+
+                <strong>重量・容量</strong>
+
+                <span>
+                    初期値は自動設定
+                </span>
+
+            </div>
+
+            <div class="bp-form-grid">
+
+                <label>
+
+                    <span id="bp-lot-weight-label">
+                        単位重量（kg）
+                    </span>
+
+                    <input id="bp-lot-weight"
+                           type="number"
+                           min="0"
+                           step="any"
+                           placeholder="不明">
+
+                </label>
+
+                <label>
+
+                    <span id="bp-lot-volume-label">
+                        単位容量（L）
+                    </span>
+
+                    <input id="bp-lot-volume"
+                           type="number"
+                           min="0"
+                           step="any"
+                           placeholder="不明">
+
+                </label>
+
+            </div>
+
+            <div class="bp-lot-estimate">
+
+                <div>
+
+                    <span>収納用品の合計重量</span>
+
+                    <strong id="bp-lot-total-weight">
+                        -
+                    </strong>
+
+                </div>
+
+                <div>
+
+                    <span>収納用品の合計容量</span>
+
+                    <strong id="bp-lot-total-volume">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+            <label>
+                商品画像URL（任意）
+
+                <input id="bp-lot-image-url"
+                       type="url"
+                       placeholder="https://...">
+
+            </label>
+
+            <p class="bp-detail-note">
+                未設定の場合は共通実写画像を使用します。
+            </p>
+
+        </div>
+
+        <label id="bp-lot-reason-field" hidden>
+
+            処理内容
+
+            <select id="bp-lot-reason">
+
+                <option value="consume">
+                    消費
+                </option>
+
+                <option value="discard">
+                    廃棄
+                </option>
+
+            </select>
+
+        </label>
+
+        <p id="bp-lot-error"
+           class="bp-danger"
+           hidden>
+        </p>
+
+        <div class="bp-dialog-actions">
+
+            <div class="bp-dialog-actions-right">
+
+                <button type="button"
+                        id="bp-lot-cancel"
+                        class="button button-outline">
+
+                    キャンセル
+
+                </button>
+
+                <button type="submit"
+                        id="bp-lot-submit"
+                        class="button">
+
+                    登録する
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</dialog>
+
+<!-- ========================================
+     収納用品管理ダイアログ
+========================================= -->
+
+<dialog id="bp-item-management-dialog"
+        class="bp-bag-dialog bp-item-management-dialog">
+
+    <div id="bp-item-management-content">
+    </div>
+
+</dialog>
 
 {% endblock %}

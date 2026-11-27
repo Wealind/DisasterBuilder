@@ -1,0 +1,1499 @@
+/* ========================================
+   Disaster Builder
+   非常持ち出し管理
+======================================== */
+
+.bp-metrics,
+.bp-workspace,
+.bp-unassigned {
+    background: #ffffff;
+    border: 1px solid #dce5da;
+    border-radius: 12px;
+}
+
+
+/* ========================================
+   準備状況・期限管理
+======================================== */
+
+.bp-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.bp-preparation {
+    padding-right: 24px;
+    border-right: 1px solid #dce5da;
+}
+
+.bp-expiry {
+    padding-left: 24px;
+}
+
+.bp-metric-title {
+    font-size: 14px;
+    color: #697d70;
+    margin-bottom: 10px;
+}
+
+.bp-preparation-values {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.bp-preparation-values strong {
+    font-size: 25px;
+    color: #347d65;
+}
+
+#bp-required-types {
+    color: #697d70;
+    font-size: 14px;
+}
+
+#bp-shortage {
+    color: #b65b28;
+    font-size: 14px;
+}
+
+.bp-expiry-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.bp-expiry-cell {
+    text-align: center;
+}
+
+.bp-expiry-cell > span {
+    display: block;
+    font-size: 13px;
+    color: #697d70;
+    margin-bottom: 5px;
+}
+
+.bp-expiry-cell strong {
+    font-size: 24px;
+}
+
+.bp-danger {
+    color: #bc4949;
+}
+
+.bp-warning {
+    color: #b65b28;
+}
+
+.bp-unknown {
+    color: #a47739;
+}
+
+
+/* ========================================
+   プログレスバー
+======================================== */
+
+.bp-progress {
+    width: 100%;
+    height: 7px;
+    background: #e2e9df;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.bp-progress-fill {
+    width: 0;
+    height: 100%;
+    background: #72a184;
+    border-radius: 10px;
+    transition: width 0.25s ease;
+}
+
+.bp-progress-fill.is-over {
+    background: #bc4949;
+}
+
+
+/* ========================================
+   リュック選択タブ
+======================================== */
+
+.bp-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.bp-tabs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.bp-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 10px 18px;
+
+    background: #ffffff;
+    color: #30483e;
+
+    border: 1px solid #dce5da;
+    border-radius: 8px;
+
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.bp-tab:hover {
+    background: #e8efe5;
+}
+
+.bp-tab.is-active {
+    background: #347d65;
+    border-color: #347d65;
+    color: #ffffff;
+}
+
+.bp-tab svg {
+    width: 18px;
+    height: 18px;
+}
+
+
+/* ========================================
+   リュック構成エリア
+======================================== */
+
+.bp-workspace {
+    padding: 24px;
+    margin-bottom: 16px;
+}
+
+.bp-workspace-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid #e2e9df;
+}
+
+.bp-workspace-heading h2 {
+    font-size: 20px;
+    color: #30483e;
+    margin: 0;
+}
+
+.bp-workspace-body {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr)
+                           minmax(0, 2fr);
+    gap: 28px;
+    align-items: start;
+}
+
+
+/* ========================================
+   左側：リュック画像
+======================================== */
+
+.bp-bag-panel {
+    min-width: 0;
+}
+
+.bp-bag-image {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.bp-bag-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.bp-bag-image .bp-image-fallback {
+    font-size: 14px;
+}
+
+.bp-bag-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+
+    padding: 12px 0 20px;
+}
+
+.bp-bag-description strong {
+    font-size: 18px;
+    color: #30483e;
+}
+
+.bp-bag-description span {
+    font-size: 13px;
+    color: #697d70;
+}
+
+
+/* ========================================
+   重量・容量
+======================================== */
+
+.bp-bag-stat {
+    padding: 18px 0;
+    border-top: 1px solid #e2e9df;
+}
+
+.bp-stat-label {
+    color: #697d70;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+.bp-stat-value {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.bp-stat-value strong {
+    color: #347d65;
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+.bp-stat-value strong.is-over {
+    color: #bc4949;
+}
+
+.bp-stat-value span {
+    font-size: 14px;
+    color: #697d70;
+}
+
+.bp-stat-note {
+    font-size: 12px;
+    color: #697d70;
+    margin-top: 8px;
+}
+
+
+/* ========================================
+   右側：収納用品
+======================================== */
+
+.bp-items-panel {
+    min-width: 0;
+}
+
+.bp-items-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+}
+
+.bp-items-heading h3 {
+    font-size: 16px;
+    color: #30483e;
+    margin: 0;
+}
+
+.bp-items-heading span {
+    font-size: 13px;
+    color: #697d70;
+}
+
+.bp-items-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+
+/* ========================================
+   用品カード
+======================================== */
+
+.bp-item-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 100%;
+    min-width: 0;
+
+    padding: 10px;
+
+    background: #ffffff;
+    border: 1px solid #dce5da;
+    border-radius: 10px;
+
+    cursor: pointer;
+    font: inherit;
+
+    transition:
+        border-color 0.15s ease,
+        background 0.15s ease;
+}
+
+.bp-item-card:hover {
+    border-color: #72a184;
+    background: #f5f8f3;
+}
+
+.bp-item-card.is-selected {
+    border-color: #347d65;
+    background: #edf4e9;
+}
+
+.bp-item-card.is-empty {
+    background: #f7f8f5;
+}
+
+.bp-item-image {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    overflow: hidden;
+    border-radius: 6px;
+}
+
+.bp-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.bp-item-empty {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #b3c0b0;
+}
+
+.bp-item-empty svg {
+    width: 36px;
+    height: 36px;
+}
+
+.bp-item-name {
+    color: #30483e;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+
+    margin-top: 8px;
+
+    overflow-wrap: anywhere;
+}
+
+.bp-item-quantity {
+    color: #347d65;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+.bp-item-card.is-empty .bp-item-quantity {
+    color: #9aa699;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+
+/* ========================================
+   画像未配置時の表示
+======================================== */
+
+.bp-image-fallback {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    gap: 8px;
+
+    background: #f3f6f0;
+    color: #849387;
+
+    font-size: 11px;
+    text-align: center;
+}
+
+.bp-image-fallback svg {
+    width: 32px;
+    height: 32px;
+}
+
+
+/* ========================================
+   商品詳細
+======================================== */
+
+.bp-item-detail {
+    padding: 18px;
+    margin-top: 20px;
+
+    background: #f3f6f0;
+    border: 1px solid #dce5da;
+    border-radius: 10px;
+}
+
+.bp-detail-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+.bp-detail-heading h3 {
+    margin: 0;
+    color: #30483e;
+    font-size: 16px;
+}
+
+.bp-detail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 7px 0;
+    font-size: 14px;
+}
+
+.bp-detail-label {
+    color: #697d70;
+}
+
+.bp-detail-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    flex-wrap: wrap;
+
+    margin-top: 16px;
+}
+
+.bp-small-button {
+    background: #ffffff;
+    border: 1px solid #cbdace;
+    border-radius: 7px;
+
+    padding: 7px 12px;
+
+    color: #347d65;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.bp-small-button:disabled,
+.bp-toolbar button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+.bp-detail-note {
+    font-size: 13px;
+    color: #697d70;
+}
+
+
+/* ========================================
+   未収納用品
+======================================== */
+
+.bp-unassigned {
+    padding: 18px;
+}
+
+.bp-unassigned-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.bp-unassigned-heading h3 {
+    margin: 0 0 5px;
+    color: #30483e;
+    font-size: 16px;
+}
+
+.bp-unassigned-heading p {
+    margin: 0;
+    color: #697d70;
+    font-size: 13px;
+}
+
+.bp-unassigned-heading strong {
+    color: #b65b28;
+    white-space: nowrap;
+}
+
+.bp-unassigned-items {
+    margin-top: 12px;
+}
+
+.bp-unassigned-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 10px 0;
+    border-top: 1px solid #e2e9df;
+
+    font-size: 14px;
+    color: #30483e;
+}
+
+.bp-error {
+    margin-top: 16px;
+    padding: 12px;
+
+    background: #f9e9e9;
+    color: #bc4949;
+
+    border-radius: 8px;
+}
+
+.bp-item-detail[hidden],
+.bp-error[hidden] {
+    display: none;
+}
+
+
+/* ========================================
+   レスポンシブ
+======================================== */
+
+@media (max-width: 1000px) {
+
+    .bp-workspace {
+        padding: 18px;
+    }
+
+    .bp-workspace-body {
+        grid-template-columns: minmax(150px, 1fr)
+                               minmax(0, 2fr);
+        gap: 18px;
+    }
+
+    .bp-item-card {
+        padding: 7px;
+    }
+
+    .bp-item-name {
+        font-size: 12px;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .bp-metrics {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .bp-preparation {
+        padding-right: 0;
+        padding-bottom: 16px;
+        border-right: none;
+        border-bottom: 1px solid #dce5da;
+    }
+
+    .bp-expiry {
+        padding-left: 0;
+    }
+
+    .bp-workspace-body {
+        grid-template-columns: 1fr;
+    }
+
+    .bp-bag-image {
+        max-width: 220px;
+        margin: 0 auto;
+    }
+
+    .bp-bag-panel {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .bp-bag-image,
+    .bp-bag-description {
+        grid-column: 1 / -1;
+    }
+
+    .bp-items-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .bp-stat-value strong {
+        font-size: 24px;
+    }
+
+    .bp-tab {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+}
+
+/* ========================================
+   リュック・用品カードのサイズ最適化
+======================================== */
+
+/* リュックエリアの横幅を制限 */
+
+.bp-workspace-body {
+    grid-template-columns: minmax(180px, 300px)
+                           minmax(0, 1fr);
+    gap: 28px;
+}
+
+
+/* リュック画像の最大サイズ */
+
+.bp-bag-image {
+    max-width: 300px;
+    max-height: 400px;
+    margin: 0 auto;
+}
+
+
+/* 表示領域に応じて列数を自動調整 */
+
+.bp-items-grid {
+    grid-template-columns:
+        repeat(auto-fill, minmax(150px, 1fr));
+
+    gap: 10px;
+}
+
+
+/* 用品カードの最大サイズ */
+
+.bp-item-card {
+    max-width: 200px;
+    height: 100%;
+    justify-self: center;
+}
+
+
+/* 商品画像の最大サイズ */
+
+.bp-item-image {
+    max-width: 180px;
+    max-height: 180px;
+}
+
+
+/* ========================================
+   タブレット
+======================================== */
+
+@media (max-width: 1000px) {
+
+    .bp-workspace-body {
+        grid-template-columns: minmax(150px, 240px)
+                               minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .bp-items-grid {
+        grid-template-columns:
+            repeat(auto-fill, minmax(130px, 1fr));
+    }
+
+}
+
+
+/* ========================================
+   スマートフォン
+======================================== */
+
+@media (max-width: 768px) {
+
+    .bp-workspace-body {
+        grid-template-columns: 1fr;
+    }
+
+    .bp-bag-image {
+        max-width: 220px;
+        max-height: 294px;
+    }
+
+    .bp-items-grid {
+        grid-template-columns:
+            repeat(auto-fill, minmax(100px, 1fr));
+
+        gap: 8px;
+    }
+
+}
+
+/* ========================================
+   カテゴリカラー
+======================================== */
+
+/* カード本体は白背景 */
+
+.bp-item-card,
+.bp-item-card.is-empty {
+    background: #ffffff;
+}
+
+
+/* 画像エリアにカテゴリカラーを適用 */
+
+.bp-item-image {
+    background: var(
+        --bp-category-bg,
+        #f3f6f0
+    );
+}
+
+
+/* 未収納の＋アイコン */
+
+.bp-item-empty {
+    color: var(
+        --bp-category-color,
+        #b3c0b0
+    );
+}
+
+
+/* 白背景の商品画像を馴染ませる */
+
+.bp-item-image img {
+    mix-blend-mode: multiply;
+}
+
+
+/* 画像準備中 */
+
+.bp-item-image .bp-image-fallback {
+    background: transparent;
+
+    color: var(
+        --bp-category-color,
+        #849387
+    );
+}
+
+
+/* ホバー */
+
+.bp-item-card:hover {
+    background: #f7f9f5;
+
+    border-color: var(
+        --bp-category-color,
+        #72a184
+    );
+}
+
+
+/* 選択中 */
+
+.bp-item-card.is-selected {
+    background: #ffffff;
+
+    border-color: var(
+        --bp-category-color,
+        #347d65
+    );
+
+    box-shadow: 0 0 0 1px var(
+        --bp-category-color,
+        #347d65
+    );
+}
+
+/* ========================================
+   カテゴリ別カラー定義
+======================================== */
+
+/* 飲料水・食料 */
+.bp-item-card[data-category="food"] {
+    --bp-category-bg: #e3eddf;
+    --bp-category-color: #638d7d;
+}
+
+/* トイレ・衛生 */
+.bp-item-card[data-category="hygiene"] {
+    --bp-category-bg: #e2edf2;
+    --bp-category-color: #608697;
+}
+
+/* 照明・電源 */
+.bp-item-card[data-category="power"] {
+    --bp-category-bg: #f3ead1;
+    --bp-category-color: #9c8650;
+}
+
+/* 防寒・生活 */
+.bp-item-card[data-category="life"] {
+    --bp-category-bg: #f3e4da;
+    --bp-category-color: #a47e65;
+}
+
+/* 避難用品 */
+.bp-item-card[data-category="evacuation"] {
+    --bp-category-bg: #dce7cf;
+    --bp-category-color: #758c57;
+}
+
+/* 医療・救急 */
+.bp-item-card[data-category="medical"] {
+    --bp-category-bg: #f3e1e1;
+    --bp-category-color: #ad7474;
+}
+
+/* 情報・通信 */
+.bp-item-card[data-category="info"] {
+    --bp-category-bg: #e9e4f2;
+    --bp-category-color: #8a7ca6;
+}
+
+/* 調理・生活用品 */
+.bp-item-card[data-category="cooking"] {
+    --bp-category-bg: #f2ead9;
+    --bp-category-color: #a28b62;
+}
+
+/* 乳幼児用品 */
+.bp-item-card[data-category="infant"] {
+    --bp-category-bg: #f4e4ed;
+    --bp-category-color: #ae7c98;
+}
+
+/* 高齢者用品 */
+.bp-item-card[data-category="senior"] {
+    --bp-category-bg: #e0e9e9;
+    --bp-category-color: #648b8c;
+}
+
+/* ペット用品 */
+.bp-item-card[data-category="pet"] {
+    --bp-category-bg: #eaddd2;
+    --bp-category-color: #9a7962;
+}
+
+/* ========================================
+   リュック登録・編集ダイアログ
+======================================== */
+
+.bp-bag-dialog {
+    width: min(540px, calc(100% - 32px));
+    max-height: 90vh;
+    box-sizing: border-box;
+    padding: 24px;
+    border: 1px solid #dce5da;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #30483e;
+    overflow-y: auto;
+}
+
+.bp-bag-dialog::backdrop {
+    background: rgba(30, 45, 35, 0.4);
+}
+
+.bp-bag-dialog h2 {
+    font-size: 20px;
+    margin: 0 0 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #dce5da;
+}
+
+.bp-bag-dialog label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.bp-bag-dialog input {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid #cbdace;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #30483e;
+    font: inherit;
+    font-weight: normal;
+}
+
+.bp-bag-dialog input:focus {
+    outline: 2px solid #72a184;
+    outline-offset: 1px;
+}
+
+.bp-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 16px;
+}
+
+.bp-dialog-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #dce5da;
+    flex-wrap: wrap;
+}
+
+.bp-dialog-actions-right {
+    display: flex;
+    gap: 8px;
+    margin-left: auto;
+}
+
+#bp-save-bag {
+    background: #347d65;
+    color: #ffffff;
+    border: 1px solid #347d65;
+}
+
+.bp-delete-button {
+    padding: 8px 12px;
+    background: #ffffff;
+    color: #bc4949;
+    border: 1px solid #e3bcbc;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.bp-delete-button:hover {
+    background: #f9e9e9;
+}
+
+.bp-bag-dialog [hidden],
+.bp-workspace[hidden] {
+    display: none;
+}
+
+.bp-bag-meta {
+    color: #697d70;
+    font-size: 13px;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .bp-bag-dialog {
+        padding: 18px;
+    }
+
+    .bp-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========================================
+   STEP 4
+   収納用品登録・編集
+======================================== */
+
+.bp-lot-dialog {
+    width: min(580px, calc(100% - 32px));
+}
+
+.bp-lot-dialog select {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid #cbdace;
+    border-radius: 7px;
+    background: #ffffff;
+    color: #30483e;
+    font: inherit;
+    font-weight: normal;
+}
+
+.bp-lot-form-heading {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #dce5da;
+}
+
+.bp-lot-form-image {
+    width: 84px;
+    height: 84px;
+    flex: 0 0 84px;
+    border: 1px solid #dce5da;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+}
+
+.bp-lot-form-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#bp-lot-form-item-name {
+    display: block;
+    font-size: 18px;
+    margin: 4px 0;
+}
+
+.bp-lot-section-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 16px;
+    margin: 8px 0 14px;
+    border-top: 1px solid #dce5da;
+}
+
+.bp-lot-section-heading span {
+    font-size: 12px;
+    color: #697d70;
+}
+
+.bp-lot-estimate {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    padding: 14px;
+    margin-bottom: 18px;
+    border-radius: 8px;
+    background: #f1f5ee;
+}
+
+.bp-lot-estimate span {
+    display: block;
+    font-size: 12px;
+    color: #697d70;
+}
+
+.bp-lot-estimate strong {
+    display: block;
+    margin-top: 5px;
+    font-size: 21px;
+    color: #347d65;
+}
+
+#bp-lot-submit {
+    background: #347d65;
+    color: #ffffff;
+    border: 1px solid #347d65;
+}
+
+
+/* ========================================
+   収納用品詳細
+======================================== */
+
+.bp-lot-summary {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    padding: 16px 0;
+}
+
+.bp-lot-summary-cell {
+    min-width: 0;
+}
+
+.bp-lot-summary-cell span {
+    display: block;
+    font-size: 12px;
+    color: #697d70;
+    margin-bottom: 6px;
+}
+
+.bp-lot-summary-cell strong {
+    font-size: 23px;
+    color: #30483e;
+}
+
+.bp-lot-summary-cell:first-child strong {
+    color: #347d65;
+}
+
+.bp-lot-list {
+    border-top: 1px solid #dce5da;
+    padding-top: 14px;
+    margin-top: 16px;
+}
+
+.bp-lot-list-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.bp-lot-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #e4ebe1;
+}
+
+.bp-lot-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.bp-lot-product-name {
+    font-size: 15px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.bp-lot-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #697d70;
+}
+
+.bp-lot-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.bp-lot-quantity {
+    font-size: 19px;
+    font-weight: 600;
+    color: #347d65;
+    white-space: nowrap;
+}
+
+.bp-lot-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.bp-lot-expired {
+    color: #bc4949;
+}
+
+.bp-lot-soon {
+    color: #b65b28;
+}
+
+.bp-lot-unknown {
+    color: #a47739;
+}
+
+.bp-lot-notice {
+    padding: 10px 12px;
+    margin-top: 12px;
+    background: #faf4e8;
+    border-radius: 7px;
+    font-size: 12px;
+    color: #8c7044;
+}
+
+.bp-item-card.has-expired {
+    border-color: #bc4949;
+}
+
+.bp-item-card.has-expired .bp-item-quantity {
+    color: #bc4949;
+}
+
+.bp-item-card.has-expiring {
+    border-color: #c99859;
+}
+
+.bp-item-card.has-expiring .bp-item-quantity {
+    color: #b65b28;
+}
+
+@media (max-width: 640px) {
+
+    .bp-lot-row {
+        flex-wrap: wrap;
+    }
+
+    .bp-lot-info {
+        flex-basis: 100%;
+    }
+
+    .bp-lot-right {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .bp-lot-summary {
+        gap: 8px;
+    }
+
+    .bp-lot-summary-cell strong {
+        font-size: 19px;
+    }
+
+}
+
+/* ========================================
+   収納用品管理ダイアログ
+======================================== */
+
+#bp-item-detail {
+    display: none !important;
+}
+
+.bp-item-management-dialog {
+    width: min(720px, calc(100% - 32px));
+    max-height: 90vh;
+    padding: 24px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.bp-item-management-dialog::backdrop {
+    background: rgba(24, 42, 34, 0.45);
+}
+
+.bp-management-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #dce5da;
+}
+
+.bp-management-heading h2 {
+    margin: 0 0 6px;
+    font-size: 22px;
+}
+
+.bp-management-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #697d70;
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.bp-management-close:hover {
+    background: #f1f5ee;
+}
+
+.bp-management-overview {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.bp-management-image {
+    width: 120px;
+    height: 120px;
+    flex: 0 0 120px;
+    overflow: hidden;
+    border: 1px solid #dce5da;
+    border-radius: 9px;
+    background: #ffffff;
+}
+
+.bp-management-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.bp-management-summary {
+    flex: 1;
+    min-width: 0;
+}
+
+.bp-management-main-quantity {
+    margin-bottom: 12px;
+}
+
+.bp-management-main-quantity span {
+    display: block;
+    font-size: 12px;
+    color: #697d70;
+}
+
+.bp-management-main-quantity strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 30px;
+    color: #347d65;
+}
+
+.bp-management-quantities {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.bp-management-products {
+    padding-top: 16px;
+    border-top: 1px solid #dce5da;
+}
+
+.bp-management-add {
+    padding: 8px 14px;
+    border: 1px solid #347d65;
+    border-radius: 7px;
+    background: #347d65;
+    color: #ffffff;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.bp-management-add:hover {
+    background: #296a54;
+}
+
+.bp-item-management-dialog .bp-lot-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 14px;
+    margin-top: 12px;
+    border: 1px solid #dce5da;
+    border-radius: 9px;
+    background: #ffffff;
+}
+
+.bp-item-management-dialog .bp-lot-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.bp-item-management-dialog .bp-lot-right {
+    display: contents;
+}
+
+.bp-item-management-dialog .bp-lot-quantity {
+    align-self: flex-start;
+    margin-left: auto;
+}
+
+.bp-item-management-dialog .bp-lot-actions {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 8px;
+}
+
+.bp-management-footer {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #dce5da;
+}
+
+.bp-management-footer-close {
+    margin-left: auto;
+}
+
+.bp-item-card {
+    cursor: pointer;
+}
+
+@media (max-width: 640px) {
+
+    .bp-item-management-dialog {
+        padding: 18px;
+    }
+
+    .bp-management-overview {
+        gap: 12px;
+    }
+
+    .bp-management-image {
+        width: 84px;
+        height: 84px;
+        flex-basis: 84px;
+    }
+
+    .bp-management-main-quantity strong {
+        font-size: 25px;
+    }
+
+    .bp-management-quantities strong {
+        font-size: 18px;
+    }
+
+}

@@ -1,0 +1,531 @@
+/* ========================================
+   自宅備蓄管理：上部集計
+======================================== */
+
+.stock-metrics {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    background: #fff;
+    border: 1px solid #dce5da;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.stock-metric-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #697d70;
+    margin-bottom: 10px;
+}
+
+.stock-metric-preparation {
+    min-width: 0;
+    padding-right: 24px;
+    border-right: 1px solid #dce5da;
+}
+
+.stock-metric-expiry {
+    min-width: 0;
+    padding-left: 24px;
+}
+
+.stock-preparation-button {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+}
+
+.stock-preparation-values {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.stock-preparation-count {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.stock-preparation-count strong {
+    font-size: 25px;
+    font-weight: 600;
+    color: #347d65;
+}
+
+.stock-preparation-count span {
+    font-size: 14px;
+    color: #697d70;
+}
+
+#stock-shortage {
+    font-size: 14px;
+}
+
+.stock-expiry-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: center;
+    gap: 8px;
+}
+
+.stock-expiry-metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    min-width: 0;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    padding: 3px 4px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.stock-expiry-metric:hover {
+    background: #f3f6f0;
+}
+
+.stock-expiry-metric.is-active {
+    background: #e8efe5;
+}
+
+.stock-preparation-button.is-active .stock-progress {
+    outline: 2px solid #9bb8a5;
+    outline-offset: 3px;
+}
+
+.stock-expiry-label {
+    font-size: 13px;
+    color: #697d70;
+    white-space: nowrap;
+}
+
+.stock-expiry-value {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 3px;
+}
+
+.stock-expiry-value strong {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.stock-expiry-value span {
+    font-size: 13px;
+}
+
+
+/* ========================================
+   ステータスカラー
+======================================== */
+
+.stock-success {
+    color: #347d65;
+}
+
+.stock-shortage {
+    color: #b65b28;
+}
+
+.stock-danger {
+    color: #bc4949;
+}
+
+.stock-warning {
+    color: #a47739;
+}
+
+.stock-muted {
+    color: #697d70;
+    font-size: 14px;
+}
+
+
+/* ========================================
+   ツールバー
+   既存デザインを維持
+======================================== */
+
+.stock-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.stock-toolbar select {
+    width: auto;
+    min-width: 150px;
+}
+
+#stock-add {
+    margin-left: auto;
+}
+
+
+/* ========================================
+   備蓄用品一覧
+   PC：2列
+======================================== */
+
+#stock-items {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 12px;
+}
+
+.stock-empty {
+    grid-column: 1 / -1;
+    padding: 24px;
+    text-align: center;
+    color: #697d70;
+}
+
+.stock-card {
+    min-width: 0;
+    background: #fff;
+    border: 1px solid #dce5da;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.stock-card-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.stock-card-icon {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+}
+
+.stock-card-icon svg {
+    width: 26px;
+    height: 26px;
+}
+
+.stock-card-title {
+    flex: 1;
+    min-width: 0;
+}
+
+.stock-card-title h3 {
+    margin: 3px 0 0;
+    font-size: 18px;
+}
+
+.stock-category-name {
+    font-size: 12px;
+}
+
+.stock-card-status {
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.stock-card-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #697d70;
+    font-size: 18px;
+    padding: 6px;
+    flex-shrink: 0;
+}
+
+
+/* ========================================
+   プログレスバーと数量
+   横並び
+======================================== */
+
+.stock-quantity-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 14px;
+}
+
+.stock-quantity-row .stock-progress {
+    flex: 1;
+    min-width: 0;
+}
+
+.stock-quantity-value {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    gap: 5px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.stock-quantity-value strong {
+    font-size: 19px;
+    font-weight: 600;
+}
+
+.stock-progress {
+    height: 7px;
+    background: #e2e9df;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.stock-progress-fill {
+    height: 100%;
+    background: #72a184;
+    border-radius: 8px;
+    transition: width .2s;
+}
+
+
+/* ========================================
+   登録済み商品
+======================================== */
+
+.stock-lots {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #e2e9df;
+}
+
+.stock-lots-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.stock-lot {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #e8ede5;
+}
+
+.stock-lot:last-child {
+    border-bottom: none;
+}
+
+.stock-lot-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.stock-lot-name {
+    font-size: 15px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.stock-lot-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px 12px;
+    margin-top: 5px;
+    font-size: 13px;
+    color: #697d70;
+}
+
+.stock-lot-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.stock-lot-quantity {
+    text-align: right;
+    font-size: 19px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.stock-lot-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.stock-small-button {
+    background: #fff;
+    border: 1px solid #cbdace;
+    color: #347d65;
+    border-radius: 7px;
+    padding: 7px 10px;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.stock-small-button:hover {
+    background: #f0f5ef;
+}
+
+
+/* ========================================
+   注意書き
+======================================== */
+
+.stock-notice {
+    margin-top: 10px;
+    padding: 9px 12px;
+    background: #faf4e8;
+    color: #a47739;
+    border-radius: 7px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* ========================================
+   登録ダイアログ
+   既存デザインを維持
+======================================== */
+
+.stock-dialog {
+    width: min(520px, calc(100% - 24px));
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid #dce5da;
+    border-radius: 16px;
+    padding: 24px;
+    background: #fff;
+    color: #30483e;
+    box-shadow: 0 15px 50px #203b3026;
+}
+
+.stock-dialog::backdrop {
+    background: #203b3055;
+}
+
+.stock-dialog h2 {
+    margin: 0 0 20px;
+    font-size: 21px;
+}
+
+.stock-dialog label {
+    display: block;
+    margin: 13px 0 6px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.stock-dialog input,
+.stock-dialog select {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.stock-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.stock-dialog [hidden] {
+    display: none !important;
+}
+
+
+/* ========================================
+   カード内の横幅が狭い場合
+======================================== */
+
+.stock-card {
+    container-type: inline-size;
+}
+
+@container (max-width: 460px) {
+
+    .stock-lot {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .stock-lot-info {
+        flex-basis: 100%;
+    }
+
+    .stock-lot-right {
+        margin-left: auto;
+    }
+
+}
+
+
+/* ========================================
+   モバイル対応
+======================================== */
+
+@media (max-width: 768px) {
+
+    .stock-metrics {
+        grid-template-columns: 1fr;
+        padding: 14px;
+        gap: 14px;
+    }
+
+    .stock-metric-preparation {
+        padding-right: 0;
+        padding-bottom: 14px;
+        border-right: none;
+        border-bottom: 1px solid #dce5da;
+    }
+
+    .stock-metric-expiry {
+        padding-left: 0;
+    }
+
+    #stock-items {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .stock-card {
+        padding: 12px;
+    }
+
+    .stock-toolbar select {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .stock-dialog {
+        padding: 18px;
+    }
+
+}

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
 
     <meta charset="UTF-8">
@@ -8,148 +9,217 @@
           content="width=device-width, initial-scale=1.0">
 
     <title>
-        {% block title %}Disaster Builder{% endblock %}
+        {% block title %}
+        Disaster Builder
+        {% endblock %}
     </title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', path='/css/style.css') }}">
 
     <script defer
+            src="https://unpkg.com/lucide@0.456.0/dist/umd/lucide.min.js">
+    </script>
+
+    <script defer
             src="{{ url_for('static', path='/js/main.js') }}">
+    </script>
+
+    <script defer
+            src="{{ url_for('static', path='/js/stock.js') }}">
     </script>
 
 </head>
 
 <body>
 
-<header class="site-header">
+    <!-- ヘッダー -->
 
-    <a href="/" class="brand">
+    <header class="site-header">
 
-        <div class="brand-logo">
+        <a href="/" class="brand">
 
-            <svg viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="1.8"
-                 stroke-linejoin="round">
+            <div class="brand-logo">
 
-                <path d="M12 2L21 6V12C21 17 17 21 12 23
-                         C7 21 3 17 3 12V6Z"/>
+                <svg viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="1.8"
+                     stroke-linejoin="round">
 
-                <path d="M8 12L11 15L16 9"/>
+                    <path d="M12 2L21 6V12C21 17 17 21 12 23 C7 21 3 17 3 12V6Z"/>
 
-            </svg>
+                    <path d="M8 12L11 15L16 9"/>
 
-        </div>
+                </svg>
 
-        <div>
-            <div class="brand-name">Disaster Builder</div>
-            <div class="brand-description">
-                わが家の防災管理
             </div>
-        </div>
 
-    </a>
+            <div>
 
-    <div class="header-right">
+                <div class="brand-name">
+                    Disaster Builder
+                </div>
 
-        <span id="current-date"></span>
+                <div class="brand-description">
+                    わが家の防災管理
+                </div>
 
-        <a href="/settings" class="button button-outline">
-            家庭設定
+            </div>
+
         </a>
 
-    </div>
+        <div class="header-right">
 
-    <button type="button"
-            class="mobile-menu"
-            id="mobile-menu"
-            aria-label="メニュー"
-            aria-expanded="false">
-        ☰
-    </button>
+            <span id="current-date"></span>
 
-</header>
-
-
-<aside class="sidebar" id="sidebar">
-
-    {% set groups = [
-        (
-            "マイ防災",
-            [
-                ("dashboard", "/", "dashboard", "ダッシュボード"),
-                ("builder", "/builder", "builder", "防災用品の構成")
-            ]
-        ),
-        (
-            "備蓄管理",
-            [
-                ("stock", "/stock", "home", "自宅備蓄管理"),
-                ("backpack", "/backpack", "bag", "非常持ち出し管理"),
-                ("expiry", "/expiry", "calendar", "期限・点検管理")
-            ]
-        ),
-        (
-            "購入・記録",
-            [
-                ("shopping", "/shopping", "cart", "購入リスト"),
-                ("history", "/history", "history", "購入・消費履歴")
-            ]
-        ),
-        (
-            "設定",
-            [
-                ("settings", "/settings", "settings", "家庭設定")
-            ]
-        )
-    ] %}
-
-    {% for label, links in groups %}
-
-        <div class="nav-group">
-
-            <div class="nav-label">{{ label }}</div>
-
-            {% for page, url, icon, text in links %}
-
-                <a href="{{ url }}"
-                   class="nav-link
-                   {% if active_page == page %}active{% endif %}"
-                   {% if active_page == page %}
-                   aria-current="page"
-                   {% endif %}>
-
-                    <span class="nav-icon"
-                          data-icon="{{ icon }}">
-                    </span>
-
-                    <span>{{ text }}</span>
-
-                </a>
-
-            {% endfor %}
+            <a href="/settings"
+               class="button button-outline">
+                家庭設定
+            </a>
 
         </div>
 
-    {% endfor %}
+        <button type="button"
+                class="mobile-menu"
+                id="mobile-menu"
+                aria-label="メニュー"
+                aria-expanded="false">
+            ☰
+        </button>
 
-</aside>
-
-<div class="sidebar-overlay"
-     id="sidebar-overlay"
-     hidden>
-</div>
+    </header>
 
 
-<main class="main-content"
-      data-page="{{ active_page }}">
+    <!-- サイドバー -->
 
-    {% block content %}
-    {% endblock %}
+    <aside class="sidebar" id="sidebar">
 
-</main>
+        {% set groups = [
+
+            (
+                "マイ防災",
+                [
+                    (
+                        "dashboard",
+                        "/",
+                        "dashboard",
+                        "ダッシュボード"
+                    ),
+                    (
+                        "builder",
+                        "/builder",
+                        "builder",
+                        "防災用品の構成"
+                    )
+                ]
+            ),
+
+            (
+                "備蓄管理",
+                [
+                    (
+                        "stock",
+                        "/stock",
+                        "home",
+                        "自宅備蓄管理"
+                    ),
+                    (
+                        "backpack",
+                        "/backpack",
+                        "bag",
+                        "非常持ち出し管理"
+                    )
+                ]
+            ),
+
+            (
+                "購入・記録",
+                [
+                    (
+                        "shopping",
+                        "/shopping",
+                        "cart",
+                        "購入リスト"
+                    ),
+                    (
+                        "history",
+                        "/history",
+                        "history",
+                        "購入・消費履歴"
+                    )
+                ]
+            ),
+
+            (
+                "設定",
+                [
+                    (
+                        "settings",
+                        "/settings",
+                        "settings",
+                        "家庭設定"
+                    )
+                ]
+            )
+
+        ] %}
+
+        {% for label, links in groups %}
+
+            <div class="nav-group">
+
+                <div class="nav-label">
+                    {{ label }}
+                </div>
+
+                {% for page, url, icon, text in links %}
+
+                    <a href="{{ url }}"
+
+                       class="nav-link {% if active_page == page %}active{% endif %}"
+
+                       {% if active_page == page %}
+                       aria-current="page"
+                       {% endif %}>
+
+                        <span class="nav-icon"
+                              data-icon="{{ icon }}">
+                        </span>
+
+                        <span>
+                            {{ text }}
+                        </span>
+
+                    </a>
+
+                {% endfor %}
+
+            </div>
+
+        {% endfor %}
+
+    </aside>
+
+
+    <!-- モバイル用オーバーレイ -->
+
+    <div class="sidebar-overlay"
+         id="sidebar-overlay"
+         hidden>
+    </div>
+
+
+    <!-- メインコンテンツ -->
+
+    <main class="main-content"
+          data-page="{{ active_page }}">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
 
 </body>
+
 </html>

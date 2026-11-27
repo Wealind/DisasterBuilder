@@ -7,37 +7,24 @@
 {% block content %}
 
 <div class="page-heading">
-
     <h1>防災用品の構成</h1>
-
-    <p>
-        必要な防災用品・所有数量・不足数量を確認します。
-    </p>
-
+    <p>わが家に必要な防災用品を準備しましょう。</p>
 </div>
 
-
 <div class="card household-bar">
-
     <div class="household-info">
-
         <span class="chip" id="family-info">-</span>
         <span class="chip" id="home-days-info">-</span>
         <span class="chip" id="go-days-info">-</span>
-
     </div>
 
     <a href="/settings" class="button button-outline">
         条件を変更
     </a>
-
 </div>
 
-
 <div class="toolbar">
-
     <div class="tabs">
-
         <button class="tab active" data-storage="all">
             すべて
         </button>
@@ -49,53 +36,96 @@
         <button class="tab" data-storage="go">
             非常持ち出し
         </button>
+    </div>
+</div>
+
+<div class="builder-metrics">
+
+    <div class="metric-card">
+        <div class="metric-label">必要な用品</div>
+        <div class="builder-metric-number">
+            <span id="builder-required">-</span>
+            <span class="metric-unit">種類</span>
+        </div>
+    </div>
+
+    <div class="metric-card">
+        <div class="metric-label">準備完了</div>
+        <div class="builder-metric-number text-success">
+            <span id="builder-completed">-</span>
+            <span class="metric-unit">種類</span>
+        </div>
+    </div>
+
+    <div class="metric-card">
+        <div class="metric-label">あと必要</div>
+        <div class="builder-metric-number text-shortage">
+            <span id="builder-missing">-</span>
+            <span class="metric-unit">種類</span>
+        </div>
+    </div>
+
+</div>
+
+<div class="builder-toolbar">
+
+    <div class="builder-filters">
+
+        <select id="category-filter">
+            <option value="">すべてのカテゴリ</option>
+        </select>
+
+        <select id="sort-by">
+            <option value="category">カテゴリ順</option>
+            <option value="priority">優先度順</option>
+        </select>
+
+        <label class="filter-checkbox">
+            <input type="checkbox" id="missing-only">
+            不足用品のみ
+        </label>
 
     </div>
 
-    <label>
-        <input type="checkbox" id="missing-only">
-        不足用品のみ
-    </label>
+    <div class="view-switch">
+
+        <button type="button"
+                class="view-button active"
+                data-view="grid"
+                aria-label="カード表示">
+            <span data-icon="dashboard"></span>
+        </button>
+
+        <button type="button"
+                class="view-button"
+                data-view="list"
+                aria-label="一覧表示">
+            <span data-icon="list"></span>
+        </button>
+
+    </div>
 
 </div>
 
-
-<div class="toolbar">
-
-    <div id="builder-summary" class="muted"></div>
-
-    <select id="sort-by" style="width:180px">
-
-        <option value="category">カテゴリ順</option>
-        <option value="priority">優先度順</option>
-
-    </select>
-
-</div>
+<div id="builder-summary" class="builder-result-count"></div>
 
 <p id="page-error" class="error"></p>
 
-<div id="builder-items">
-
+<div id="builder-items" class="supply-grid">
     <p class="muted">計算中...</p>
-
 </div>
-
 
 <div class="purchase-summary">
 
     <div>
-
         <div class="metric-label">
-            概算購入金額（表示区分）
+            不足用品の概算購入額（表示区分）
         </div>
 
-        <div class="metric-value"
-             id="builder-price">-</div>
+        <div class="metric-value" id="builder-price">-</div>
 
         <div class="metric-description"
              id="builder-price-note"></div>
-
     </div>
 
     <a href="/shopping" class="button">
@@ -103,5 +133,32 @@
     </a>
 
 </div>
+
+<dialog id="supply-dialog" class="supply-dialog">
+
+    <div class="dialog-header">
+
+        <h2 id="dialog-title">用品の詳細</h2>
+
+        <button type="button"
+                id="dialog-close"
+                class="dialog-close"
+                aria-label="閉じる">
+            ×
+        </button>
+
+    </div>
+
+    <div id="dialog-content"></div>
+
+    <div class="dialog-footer">
+        <button type="button"
+                id="dialog-done"
+                class="button">
+            閉じる
+        </button>
+    </div>
+
+</dialog>
 
 {% endblock %}

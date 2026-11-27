@@ -7,24 +7,16 @@
 {% block content %}
 
 <div class="page-heading">
-
     <h1>わが家の防災状況</h1>
-
-    <p>
-        家庭の備蓄状況と対応が必要な防災用品を確認できます。
-    </p>
-
+    <p>少しずつ、安心できる備えを整えていきましょう。</p>
 </div>
-
 
 <div class="card household-bar">
 
     <div class="household-info">
-
         <span class="chip" id="family-info">-</span>
         <span class="chip" id="home-days-info">-</span>
         <span class="chip" id="go-days-info">-</span>
-
     </div>
 
     <a href="/settings" class="button button-outline">
@@ -33,102 +25,134 @@
 
 </div>
 
+<div class="card readiness-card">
 
-<div class="metric-grid">
+    <div class="readiness-main">
 
-    <div class="metric-card">
+        <div class="readiness-ring" id="readiness-ring">
 
-        <div class="metric-label">
-            自宅備蓄の準備率
+            <div class="readiness-inner">
+                <div class="readiness-label">防災準備率</div>
+                <div id="overall-rate" class="readiness-value">-</div>
+            </div>
+
         </div>
 
-        <div class="metric-value text-success"
-             id="home-rate">-</div>
+        <div class="readiness-description">
 
-        <div class="progress">
-            <div class="progress-fill"
-                 id="home-progress"></div>
-        </div>
+            <h2 id="readiness-message">防災状況を確認中</h2>
 
-        <div class="metric-description"
-             id="home-detail">計算中</div>
+            <p id="overall-detail" class="muted">
+                計算中...
+            </p>
 
-    </div>
+            <a href="/builder" class="button">
+                防災用品を確認する
+            </a>
 
-    <div class="metric-card">
-
-        <div class="metric-label">
-            非常持ち出しの準備率
-        </div>
-
-        <div class="metric-value text-success"
-             id="go-rate">-</div>
-
-        <div class="progress">
-            <div class="progress-fill"
-                 id="go-progress"></div>
-        </div>
-
-        <div class="metric-description"
-             id="go-detail">計算中</div>
-
-    </div>
-
-    <div class="metric-card">
-
-        <div class="metric-label">
-            期限切れの用品
-        </div>
-
-        <div class="metric-value">-</div>
-
-        <div class="metric-description">
-            期限管理機能は準備中
         </div>
 
     </div>
 
-    <div class="metric-card">
+    <div class="readiness-breakdown">
 
-        <div class="metric-label">
-            90日以内に期限到来
+        <div class="readiness-subcard">
+
+            <div class="metric-label">自宅備蓄</div>
+
+            <div class="metric-value text-success"
+                 id="home-rate">-</div>
+
+            <div class="progress">
+                <div class="progress-fill"
+                     id="home-progress"></div>
+            </div>
+
+            <div class="metric-description"
+                 id="home-detail"></div>
+
         </div>
 
-        <div class="metric-value">-</div>
+        <div class="readiness-subcard">
 
-        <div class="metric-description">
-            期限管理機能は準備中
+            <div class="metric-label">非常持ち出し</div>
+
+            <div class="metric-value text-success"
+                 id="go-rate">-</div>
+
+            <div class="progress">
+                <div class="progress-fill"
+                     id="go-progress"></div>
+            </div>
+
+            <div class="metric-description"
+                 id="go-detail"></div>
+
         </div>
 
     </div>
 
 </div>
 
+<section class="dashboard-section">
 
-<div class="dashboard-grid">
+    <div class="section-heading">
 
-    <div class="card">
+        <div>
+            <h2>優先して準備したい用品</h2>
+            <p class="muted">
+                生活に欠かせない基本の防災用品です。
+            </p>
+        </div>
 
-        <h2>対応が必要なこと</h2>
+        <a href="/builder?missing=1">
+            不足用品を見る
+        </a>
+
+    </div>
+
+    <div id="priority-items" class="priority-grid">
+        <p class="muted">計算中...</p>
+    </div>
+
+</section>
+
+<section class="dashboard-section">
+
+    <div class="section-heading">
+        <h2>カテゴリ別準備状況</h2>
+        <a href="/builder">すべて見る</a>
+    </div>
+
+    <div id="category-progress" class="category-grid">
+        <p class="muted">計算中...</p>
+    </div>
+
+</section>
+
+<section class="dashboard-section">
+
+    <div class="section-heading">
+        <h2>確認・メンテナンス</h2>
+    </div>
+
+    <div class="card maintenance-card">
 
         <div class="action-row">
 
             <div class="action-icon" data-icon="box"></div>
 
             <div class="action-content">
-
                 <div class="action-title">
                     不足している防災用品
                 </div>
-
                 <div class="action-description">
                     必要数量に達していない用品
                 </div>
-
             </div>
 
-            <div class="action-value text-danger"
-                 id="shortage-count">-</div>
+            <div id="shortage-count"
+                 class="action-value text-shortage">-</div>
 
             <a href="/builder?missing=1"
                class="button button-outline">
@@ -139,19 +163,15 @@
 
         <div class="action-row">
 
-            <div class="action-icon"
-                 data-icon="calendar"></div>
+            <div class="action-icon" data-icon="calendar"></div>
 
             <div class="action-content">
-
                 <div class="action-title">
                     賞味・使用期限の確認
                 </div>
-
                 <div class="action-description">
-                    備蓄用品の交換・補充時期
+                    期限管理機能は準備中です
                 </div>
-
             </div>
 
             <a href="/expiry" class="button button-outline">
@@ -165,15 +185,12 @@
             <div class="action-icon" data-icon="check"></div>
 
             <div class="action-content">
-
                 <div class="action-title">
                     防災用品の点検
                 </div>
-
                 <div class="action-description">
                     充電・動作確認・定期点検
                 </div>
-
             </div>
 
             <a href="/expiry" class="button button-outline">
@@ -184,47 +201,7 @@
 
     </div>
 
-
-    <div class="card">
-
-        <h2>カテゴリ別準備状況</h2>
-
-        <div id="category-progress">
-            <p class="muted">計算中</p>
-        </div>
-
-    </div>
-
-</div>
-
-
-<div class="card">
-
-    <h2>不足用品の購入</h2>
-
-    <div class="household-bar">
-
-        <div>
-
-            <div class="metric-label">
-                概算購入金額
-            </div>
-
-            <div class="metric-value"
-                 id="dashboard-price">-</div>
-
-            <div class="metric-description"
-                 id="dashboard-price-note"></div>
-
-        </div>
-
-        <a href="/shopping" class="button">
-            購入リストを見る
-        </a>
-
-    </div>
-
-</div>
+</section>
 
 <p class="error" id="page-error"></p>
 
