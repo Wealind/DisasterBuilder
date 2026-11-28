@@ -1,20 +1,8 @@
-/* ========================================
-   Disaster Builder
-   非常持ち出し管理
-======================================== */
-
-.bp-metrics,
-.bp-workspace,
-.bp-unassigned {
+.bp-metrics, .bp-workspace, .bp-unassigned {
     background: #ffffff;
     border: 1px solid #dce5da;
     border-radius: 12px;
 }
-
-
-/* ========================================
-   準備状況・期限管理
-======================================== */
 
 .bp-metrics {
     display: grid;
@@ -94,11 +82,6 @@
     color: #a47739;
 }
 
-
-/* ========================================
-   プログレスバー
-======================================== */
-
 .bp-progress {
     width: 100%;
     height: 7px;
@@ -118,11 +101,6 @@
 .bp-progress-fill.is-over {
     background: #bc4949;
 }
-
-
-/* ========================================
-   リュック選択タブ
-======================================== */
 
 .bp-toolbar {
     display: flex;
@@ -145,15 +123,11 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-
     padding: 10px 18px;
-
     background: #ffffff;
     color: #30483e;
-
     border: 1px solid #dce5da;
     border-radius: 8px;
-
     font-size: 14px;
     cursor: pointer;
 }
@@ -173,11 +147,6 @@
     height: 18px;
 }
 
-
-/* ========================================
-   リュック構成エリア
-======================================== */
-
 .bp-workspace {
     padding: 24px;
     margin-bottom: 16px;
@@ -188,10 +157,8 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-
     padding-bottom: 16px;
     margin-bottom: 20px;
-
     border-bottom: 1px solid #e2e9df;
 }
 
@@ -203,16 +170,11 @@
 
 .bp-workspace-body {
     display: grid;
-    grid-template-columns: minmax(180px, 1fr)
-                           minmax(0, 2fr);
+    grid-template-columns: minmax(180px, 300px)
+                           minmax(0, 1fr);
     gap: 28px;
     align-items: start;
 }
-
-
-/* ========================================
-   左側：リュック画像
-======================================== */
 
 .bp-bag-panel {
     min-width: 0;
@@ -221,13 +183,14 @@
 .bp-bag-image {
     width: 100%;
     aspect-ratio: 3 / 4;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     background: #ffffff;
     overflow: hidden;
+    max-width: 300px;
+    max-height: 400px;
+    margin: 0 auto;
 }
 
 .bp-bag-image img {
@@ -245,7 +208,6 @@
     flex-direction: column;
     align-items: center;
     gap: 5px;
-
     padding: 12px 0 20px;
 }
 
@@ -258,11 +220,6 @@
     font-size: 13px;
     color: #697d70;
 }
-
-
-/* ========================================
-   重量・容量
-======================================== */
 
 .bp-bag-stat {
     padding: 18px 0;
@@ -303,11 +260,6 @@
     margin-top: 8px;
 }
 
-
-/* ========================================
-   右側：収納用品
-======================================== */
-
 .bp-items-panel {
     min-width: 0;
 }
@@ -316,7 +268,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     margin-bottom: 12px;
 }
 
@@ -333,78 +284,87 @@
 
 .bp-items-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 10px;
 }
-
-
-/* ========================================
-   用品カード
-======================================== */
 
 .bp-item-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-
     width: 100%;
     min-width: 0;
-
     padding: 10px;
-
     background: #ffffff;
     border: 1px solid #dce5da;
     border-radius: 10px;
-
     cursor: pointer;
     font: inherit;
-
-    transition:
-        border-color 0.15s ease,
+    transition: border-color 0.15s ease,
         background 0.15s ease;
+    max-width: 200px;
+    height: 100%;
+    justify-self: center;
 }
 
 .bp-item-card:hover {
-    border-color: #72a184;
-    background: #f5f8f3;
+    border-color: var(
+        --bp-category-color,
+        #72a184
+    );
+    background: #f7f9f5;
 }
 
 .bp-item-card.is-selected {
-    border-color: #347d65;
-    background: #edf4e9;
+    border-color: var(
+        --bp-category-color,
+        #347d65
+    );
+    background: #ffffff;
+    box-shadow: 0 0 0 1px var(
+        --bp-category-color,
+        #347d65
+    );
 }
 
 .bp-item-card.is-empty {
-    background: #f7f8f5;
+    background: #ffffff;
 }
 
 .bp-item-image {
     width: 100%;
     aspect-ratio: 1 / 1;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     overflow: hidden;
     border-radius: 6px;
+    max-width: 180px;
+    max-height: 180px;
+    background: var(
+        --bp-category-bg,
+        #f3f6f0
+    );
 }
 
 .bp-item-image img {
     width: 100%;
     height: 100%;
     object-fit: contain;
+    background: #ffffff;
+    border-radius: 32px;
 }
 
 .bp-item-empty {
     width: 100%;
     height: 100%;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
-    color: #b3c0b0;
+    color: var(
+        --bp-category-color,
+        #b3c0b0
+    );
 }
 
 .bp-item-empty svg {
@@ -417,9 +377,7 @@
     font-size: 14px;
     font-weight: 600;
     text-align: center;
-
     margin-top: 8px;
-
     overflow-wrap: anywhere;
 }
 
@@ -436,25 +394,16 @@
     font-weight: normal;
 }
 
-
-/* ========================================
-   画像未配置時の表示
-======================================== */
-
 .bp-image-fallback {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     width: 100%;
     height: 100%;
-
     gap: 8px;
-
     background: #f3f6f0;
     color: #849387;
-
     font-size: 11px;
     text-align: center;
 }
@@ -464,72 +413,17 @@
     height: 32px;
 }
 
-
-/* ========================================
-   商品詳細
-======================================== */
-
-.bp-item-detail {
-    padding: 18px;
-    margin-top: 20px;
-
-    background: #f3f6f0;
-    border: 1px solid #dce5da;
-    border-radius: 10px;
-}
-
-.bp-detail-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-
-    margin-bottom: 14px;
-}
-
-.bp-detail-heading h3 {
-    margin: 0;
-    color: #30483e;
-    font-size: 16px;
-}
-
-.bp-detail-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-
-    padding: 7px 0;
-    font-size: 14px;
-}
-
-.bp-detail-label {
-    color: #697d70;
-}
-
-.bp-detail-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    flex-wrap: wrap;
-
-    margin-top: 16px;
-}
-
 .bp-small-button {
     background: #ffffff;
     border: 1px solid #cbdace;
     border-radius: 7px;
-
     padding: 7px 12px;
-
     color: #347d65;
     font-size: 13px;
     cursor: pointer;
 }
 
-.bp-small-button:disabled,
-.bp-toolbar button:disabled {
+.bp-small-button:disabled, .bp-toolbar button:disabled {
     opacity: 0.5;
     cursor: default;
 }
@@ -538,11 +432,6 @@
     font-size: 13px;
     color: #697d70;
 }
-
-
-/* ========================================
-   未収納用品
-======================================== */
 
 .bp-unassigned {
     padding: 18px;
@@ -580,10 +469,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-
     padding: 10px 0;
     border-top: 1px solid #e2e9df;
-
     font-size: 14px;
     color: #30483e;
 }
@@ -591,344 +478,73 @@
 .bp-error {
     margin-top: 16px;
     padding: 12px;
-
     background: #f9e9e9;
     color: #bc4949;
-
     border-radius: 8px;
 }
 
-.bp-item-detail[hidden],
-.bp-error[hidden] {
-    display: none;
-}
-
-
-/* ========================================
-   レスポンシブ
-======================================== */
-
-@media (max-width: 1000px) {
-
-    .bp-workspace {
-        padding: 18px;
-    }
-
-    .bp-workspace-body {
-        grid-template-columns: minmax(150px, 1fr)
-                               minmax(0, 2fr);
-        gap: 18px;
-    }
-
-    .bp-item-card {
-        padding: 7px;
-    }
-
-    .bp-item-name {
-        font-size: 12px;
-    }
-
-}
-
-@media (max-width: 768px) {
-
-    .bp-metrics {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .bp-preparation {
-        padding-right: 0;
-        padding-bottom: 16px;
-        border-right: none;
-        border-bottom: 1px solid #dce5da;
-    }
-
-    .bp-expiry {
-        padding-left: 0;
-    }
-
-    .bp-workspace-body {
-        grid-template-columns: 1fr;
-    }
-
-    .bp-bag-image {
-        max-width: 220px;
-        margin: 0 auto;
-    }
-
-    .bp-bag-panel {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 12px;
-    }
-
-    .bp-bag-image,
-    .bp-bag-description {
-        grid-column: 1 / -1;
-    }
-
-    .bp-items-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
-    }
-
-    .bp-stat-value strong {
-        font-size: 24px;
-    }
-
-    .bp-tab {
-        padding: 8px 12px;
-        font-size: 12px;
-    }
-
-}
-
-/* ========================================
-   リュック・用品カードのサイズ最適化
-======================================== */
-
-/* リュックエリアの横幅を制限 */
-
-.bp-workspace-body {
-    grid-template-columns: minmax(180px, 300px)
-                           minmax(0, 1fr);
-    gap: 28px;
-}
-
-
-/* リュック画像の最大サイズ */
-
-.bp-bag-image {
-    max-width: 300px;
-    max-height: 400px;
-    margin: 0 auto;
-}
-
-
-/* 表示領域に応じて列数を自動調整 */
-
-.bp-items-grid {
-    grid-template-columns:
-        repeat(auto-fill, minmax(150px, 1fr));
-
-    gap: 10px;
-}
-
-
-/* 用品カードの最大サイズ */
-
-.bp-item-card {
-    max-width: 200px;
-    height: 100%;
-    justify-self: center;
-}
-
-
-/* 商品画像の最大サイズ */
-
-.bp-item-image {
-    max-width: 180px;
-    max-height: 180px;
-}
-
-
-/* ========================================
-   タブレット
-======================================== */
-
-@media (max-width: 1000px) {
-
-    .bp-workspace-body {
-        grid-template-columns: minmax(150px, 240px)
-                               minmax(0, 1fr);
-        gap: 18px;
-    }
-
-    .bp-items-grid {
-        grid-template-columns:
-            repeat(auto-fill, minmax(130px, 1fr));
-    }
-
-}
-
-
-/* ========================================
-   スマートフォン
-======================================== */
-
-@media (max-width: 768px) {
-
-    .bp-workspace-body {
-        grid-template-columns: 1fr;
-    }
-
-    .bp-bag-image {
-        max-width: 220px;
-        max-height: 294px;
-    }
-
-    .bp-items-grid {
-        grid-template-columns:
-            repeat(auto-fill, minmax(100px, 1fr));
-
-        gap: 8px;
-    }
-
-}
-
-/* ========================================
-   カテゴリカラー
-======================================== */
-
-/* カード本体は白背景 */
-
-.bp-item-card,
-.bp-item-card.is-empty {
-    background: #ffffff;
-}
-
-
-/* 画像エリアにカテゴリカラーを適用 */
-
-.bp-item-image {
-    background: var(
-        --bp-category-bg,
-        #f3f6f0
-    );
-}
-
-
-/* 未収納の＋アイコン */
-
-.bp-item-empty {
-    color: var(
-        --bp-category-color,
-        #b3c0b0
-    );
-}
-
-
-/* 白背景の商品画像を馴染ませる */
-
-.bp-item-image img {
-    mix-blend-mode: multiply;
-}
-
-
-/* 画像準備中 */
-
 .bp-item-image .bp-image-fallback {
     background: transparent;
-
     color: var(
         --bp-category-color,
         #849387
     );
 }
 
-
-/* ホバー */
-
-.bp-item-card:hover {
-    background: #f7f9f5;
-
-    border-color: var(
-        --bp-category-color,
-        #72a184
-    );
-}
-
-
-/* 選択中 */
-
-.bp-item-card.is-selected {
-    background: #ffffff;
-
-    border-color: var(
-        --bp-category-color,
-        #347d65
-    );
-
-    box-shadow: 0 0 0 1px var(
-        --bp-category-color,
-        #347d65
-    );
-}
-
-/* ========================================
-   カテゴリ別カラー定義
-======================================== */
-
-/* 飲料水・食料 */
 .bp-item-card[data-category="food"] {
     --bp-category-bg: #e3eddf;
     --bp-category-color: #638d7d;
 }
 
-/* トイレ・衛生 */
 .bp-item-card[data-category="hygiene"] {
     --bp-category-bg: #e2edf2;
     --bp-category-color: #608697;
 }
 
-/* 照明・電源 */
 .bp-item-card[data-category="power"] {
     --bp-category-bg: #f3ead1;
     --bp-category-color: #9c8650;
 }
 
-/* 防寒・生活 */
 .bp-item-card[data-category="life"] {
     --bp-category-bg: #f3e4da;
     --bp-category-color: #a47e65;
 }
 
-/* 避難用品 */
 .bp-item-card[data-category="evacuation"] {
     --bp-category-bg: #dce7cf;
     --bp-category-color: #758c57;
 }
 
-/* 医療・救急 */
 .bp-item-card[data-category="medical"] {
     --bp-category-bg: #f3e1e1;
     --bp-category-color: #ad7474;
 }
 
-/* 情報・通信 */
 .bp-item-card[data-category="info"] {
     --bp-category-bg: #e9e4f2;
     --bp-category-color: #8a7ca6;
 }
 
-/* 調理・生活用品 */
 .bp-item-card[data-category="cooking"] {
     --bp-category-bg: #f2ead9;
     --bp-category-color: #a28b62;
 }
 
-/* 乳幼児用品 */
 .bp-item-card[data-category="infant"] {
     --bp-category-bg: #f4e4ed;
     --bp-category-color: #ae7c98;
 }
 
-/* 高齢者用品 */
 .bp-item-card[data-category="senior"] {
     --bp-category-bg: #e0e9e9;
     --bp-category-color: #648b8c;
 }
 
-/* ペット用品 */
 .bp-item-card[data-category="pet"] {
     --bp-category-bg: #eaddd2;
     --bp-category-color: #9a7962;
 }
-
-/* ========================================
-   リュック登録・編集ダイアログ
-======================================== */
 
 .bp-bag-dialog {
     width: min(540px, calc(100% - 32px));
@@ -1022,8 +638,7 @@
     background: #f9e9e9;
 }
 
-.bp-bag-dialog [hidden],
-.bp-workspace[hidden] {
+.bp-bag-dialog [hidden], .bp-workspace[hidden] {
     display: none;
 }
 
@@ -1032,21 +647,6 @@
     font-size: 13px;
     text-align: center;
 }
-
-@media (max-width: 480px) {
-    .bp-bag-dialog {
-        padding: 18px;
-    }
-
-    .bp-form-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ========================================
-   STEP 4
-   収納用品登録・編集
-======================================== */
 
 .bp-lot-dialog {
     width: min(580px, calc(100% - 32px));
@@ -1140,18 +740,6 @@
     border: 1px solid #347d65;
 }
 
-
-/* ========================================
-   収納用品詳細
-======================================== */
-
-.bp-lot-summary {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
-    padding: 16px 0;
-}
-
 .bp-lot-summary-cell {
     min-width: 0;
 }
@@ -1172,12 +760,6 @@
     color: #347d65;
 }
 
-.bp-lot-list {
-    border-top: 1px solid #dce5da;
-    padding-top: 14px;
-    margin-top: 16px;
-}
-
 .bp-lot-list-heading {
     display: flex;
     align-items: center;
@@ -1189,9 +771,13 @@
 .bp-lot-row {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 14px 0;
-    border-bottom: 1px solid #e4ebe1;
+    gap: 12px;
+    padding: 14px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    border: 1px solid #dce5da;
+    border-radius: 9px;
+    background: #ffffff;
 }
 
 .bp-lot-info {
@@ -1215,10 +801,7 @@
 }
 
 .bp-lot-right {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-shrink: 0;
+    display: contents;
 }
 
 .bp-lot-quantity {
@@ -1226,11 +809,16 @@
     font-weight: 600;
     color: #347d65;
     white-space: nowrap;
+    align-self: flex-start;
+    margin-left: auto;
 }
 
 .bp-lot-actions {
     display: flex;
-    gap: 6px;
+    gap: 8px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    width: 100%;
 }
 
 .bp-lot-expired {
@@ -1268,39 +856,6 @@
 
 .bp-item-card.has-expiring .bp-item-quantity {
     color: #b65b28;
-}
-
-@media (max-width: 640px) {
-
-    .bp-lot-row {
-        flex-wrap: wrap;
-    }
-
-    .bp-lot-info {
-        flex-basis: 100%;
-    }
-
-    .bp-lot-right {
-        width: 100%;
-        justify-content: flex-end;
-    }
-
-    .bp-lot-summary {
-        gap: 8px;
-    }
-
-    .bp-lot-summary-cell strong {
-        font-size: 19px;
-    }
-
-}
-
-/* ========================================
-   収納用品管理ダイアログ
-======================================== */
-
-#bp-item-detail {
-    display: none !important;
 }
 
 .bp-item-management-dialog {
@@ -1421,39 +976,6 @@
     background: #296a54;
 }
 
-.bp-item-management-dialog .bp-lot-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    padding: 14px;
-    margin-top: 12px;
-    border: 1px solid #dce5da;
-    border-radius: 9px;
-    background: #ffffff;
-}
-
-.bp-item-management-dialog .bp-lot-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.bp-item-management-dialog .bp-lot-right {
-    display: contents;
-}
-
-.bp-item-management-dialog .bp-lot-quantity {
-    align-self: flex-start;
-    margin-left: auto;
-}
-
-.bp-item-management-dialog .bp-lot-actions {
-    display: flex;
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    width: 100%;
-    gap: 8px;
-}
-
 .bp-management-footer {
     display: flex;
     align-items: center;
@@ -1468,11 +990,107 @@
     margin-left: auto;
 }
 
-.bp-item-card {
-    cursor: pointer;
+.bp-error[hidden] {
+    display: none;
+}
+
+.bp-expiry-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: normal;
+    font-size: 12px;
+}
+
+.bp-bag-dialog .bp-expiry-option input {
+    width: auto;
+}
+
+.bp-lot-actions .bp-delete-button {
+    color: #bc4949;
+    border-color: #e3bcbc;
+}
+
+@media (max-width: 1000px) {
+    .bp-workspace {
+        padding: 18px;
+    }
+
+    .bp-workspace-body {
+        grid-template-columns: minmax(150px, 240px)
+                               minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .bp-item-card {
+        padding: 7px;
+    }
+
+    .bp-item-name {
+        font-size: 12px;
+    }
+
+    .bp-items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .bp-metrics {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .bp-preparation {
+        padding-right: 0;
+        padding-bottom: 16px;
+        border-right: none;
+        border-bottom: 1px solid #dce5da;
+    }
+
+    .bp-expiry {
+        padding-left: 0;
+    }
+
+    .bp-workspace-body {
+        grid-template-columns: 1fr;
+    }
+
+    .bp-bag-image {
+        max-width: 220px;
+        margin: 0 auto;
+        max-height: 294px;
+    }
+
+    .bp-bag-panel {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .bp-bag-image, .bp-bag-description {
+        grid-column: 1 / -1;
+    }
+
+    .bp-items-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 8px;
+    }
+
+    .bp-stat-value strong {
+        font-size: 24px;
+    }
+
+    .bp-tab {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
 }
 
 @media (max-width: 640px) {
+    .bp-lot-summary-cell strong {
+        font-size: 19px;
+    }
 
     .bp-item-management-dialog {
         padding: 18px;
@@ -1495,5 +1113,14 @@
     .bp-management-quantities strong {
         font-size: 18px;
     }
+}
 
+@media (max-width: 480px) {
+    .bp-bag-dialog {
+        padding: 18px;
+    }
+
+    .bp-form-grid {
+        grid-template-columns: 1fr;
+    }
 }
